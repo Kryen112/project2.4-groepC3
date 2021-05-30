@@ -1,17 +1,26 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { LetterComponent} from "./letter/letter.component";
-import { ViewComponent} from "./view/view.component";
+import { HomeComponent } from './home/home/home.component';
+import { AuthGuardService as guard } from './auth/auth-guard.service';
+import { AuthService } from './auth/auth.service'
 
 const routes: Routes = [
-  { path: 'letter', component: LetterComponent},
-  { path : 'view', component: ViewComponent}
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
+  },
+  {
+    path: 'secret',
+    loadChildren: () => import('./secret/secret.module').then(m => m.SecretModule), canActivate: [guard]
+  }
 ];
 
 @NgModule({
   declarations: [],
   imports: [RouterModule.forRoot(routes)],
+  providers: [ guard, AuthService ],
   exports: [RouterModule]
 })
 

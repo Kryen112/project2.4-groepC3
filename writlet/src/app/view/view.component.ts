@@ -9,8 +9,6 @@ import {CommunicationService} from "../communication.service";
 export class ViewComponent implements OnInit {
   letter;
 
-
-
   constructor(private commService: CommunicationService) { }
 
   ngOnInit(): void {
