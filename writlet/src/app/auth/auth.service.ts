@@ -5,12 +5,11 @@ import { shareReplay, tap } from 'rxjs/operators'
 import * as moment from 'moment';
 import * as jwt_decode from 'jwt-decode';
 
-// Pas eventueel de onderstaande link aan: dit moet verwijzen naar de plek waar 
-// je de node-server (uit opgave 3) hebt draaien.
-
 const API_URL = 'http://localhost:5000/api/'
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthService {     
     constructor(private http: HttpClient) {
     }
@@ -33,10 +32,10 @@ export class AuthService {
     private setSession(authResult: any) {
         console.log("Setting session");
 
-        const expiresAt = moment().add(authResult.expiresIn, 'seconds');
+        const expiresAt = moment().add(authResult.expiresIn, 'milliseconds');
 
-        localStorage.setItem('id_token', authResult.idToken);
-        localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf));
+        localStorage.setItem('id_token', authResult.token);
+        localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
     }
 
     public logout() {
@@ -49,7 +48,7 @@ export class AuthService {
     public getExpiration() {
         console.log("Get experiation as json...");
 
-        const expiration = localStorage.getItem('expired_at') + "";
+        const expiration = localStorage.getItem('expires_at') + "";
         const expiresAt = JSON.parse(expiration);
 
         return moment(expiresAt);

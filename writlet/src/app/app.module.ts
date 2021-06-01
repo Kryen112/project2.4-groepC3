@@ -4,20 +4,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HeaderModule } from "./header/header.module";
 import { FooterModule } from "./footer/footer.module";
-import { FormGroup, FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
-import { ViewComponent } from './view/view.component';
-import { LoginComponent } from './login/login/login.component';
-import { HomeComponent } from './home/home/home.component';
-import {LetterComponent} from "./secret/letter/letter/letter.component";
+import { LetterComponent } from "./secret/letter/letter/letter.component";
+import { HttpClientModule } from '@angular/common/http';
+import { ViewComponent } from './secret/view/view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ViewComponent,
-    LoginComponent,
-    HomeComponent,
-    LetterComponent
+    LetterComponent,
+    ViewComponent
   ],
   imports: [
     BrowserModule,
@@ -25,8 +22,8 @@ import {LetterComponent} from "./secret/letter/letter/letter.component";
     FooterModule,
     FormsModule,
     AppRoutingModule,
-    FormGroup,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

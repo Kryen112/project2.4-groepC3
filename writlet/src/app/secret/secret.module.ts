@@ -4,12 +4,12 @@ import { RouterModule, Routes } from '@angular/router';
 import { SecretComponent } from './secret/secret.component';
 import { LetterComponent } from './letter/letter/letter.component';
 import { FormsModule } from '@angular/forms';
+import { ViewComponent } from './view/view.component';
 
 const secretRoutes:Routes = [
-  { path: '', component: SecretComponent, children: [
-      { path: '', redirectTo: 'letter' },
-      { path: '/letter', component: LetterComponent }
-  ] }
+    { path: '', redirectTo: 'letter' },
+    { path: 'letter', component: LetterComponent },
+    { path: 'view', component: ViewComponent }
 ]
 
 @NgModule({
@@ -18,7 +18,8 @@ const secretRoutes:Routes = [
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(secretRoutes)
+    RouterModule.forChild(secretRoutes),
+    FormsModule
   ]
 })
 export class SecretModule { }

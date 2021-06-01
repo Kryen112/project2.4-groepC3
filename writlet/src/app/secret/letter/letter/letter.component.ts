@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {formatDate} from '@angular/common';
 import {CommunicationService} from "../../../communication.service";
-import { RouterModule } from "@angular/router";
 
 @Component({
   selector: 'app-letter',

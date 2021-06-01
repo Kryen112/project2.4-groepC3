@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 const loginRoutes:Routes = [
   { path: '', component:LoginComponent },
@@ -10,12 +11,14 @@ const loginRoutes:Routes = [
 
 @NgModule({
   declarations: [
+    LoginComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(loginRoutes),
+    FormsModule,
     ReactiveFormsModule,
-    FormsModule
+    HttpClientModule
   ]
 })
 export class LoginModule { }

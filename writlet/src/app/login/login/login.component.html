@@ -1,7 +1,7 @@
-<form class="form-signin" [formGroup]="form">
-    <input type="text" placeholder="Gebruikersnaam" required autofocus
-            [style.backgroundColor]="errorColor" formControlName="name">
-    <input type="password" placeholder="Wachtwoord" required
-            [style.backgroundColor]="errorColor" formControlName="password">
-    <button type="submit" (click)="login()">Login</button>
+<form [formGroup]="form">
+        <input type="text" placeholder="Gebruikersnaam" required autofocus
+                [style.backgroundColor]="errorColor" formControlName="name">
+        <input type="password" placeholder="Wachtwoord" required
+                [style.backgroundColor]="errorColor" formControlName="password">
+        <button type="submit" (click)="login()">Login</button>
 </form>
