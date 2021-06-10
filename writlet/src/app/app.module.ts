@@ -14,6 +14,9 @@ import { TermsconditionsComponent } from './termsconditions/termsconditions.comp
 import { ContactComponent } from './contact/contact.component';
 import { HelpComponent } from './help/help.component';
 
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +34,13 @@ import { HelpComponent } from './help/help.component';
     FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the app is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:3000'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
