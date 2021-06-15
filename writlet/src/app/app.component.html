@@ -1,5 +1,8 @@
-<app-header></app-header>
+<app-header *ngIf="checkLoggedIn()"></app-header>
 
-<router-outlet></router-outlet>
+<router-outlet *ngIf="checkLoggedIn()"></router-outlet>
+
+<button *ngIf="!checkLoggedIn()" class="unregisteredButton">inloggen</button>
+<button *ngIf="!checkLoggedIn()" class="unregisteredButton">registreren</button>
 
 <app-footer></app-footer>

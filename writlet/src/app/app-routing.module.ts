@@ -9,7 +9,7 @@ import {ContactComponent} from "./contact/contact.component";
 import {HelpComponent} from "./help/help.component";
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: '', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'about', component: AboutComponent},
   { path: 'termsconditions', component: TermsconditionsComponent},
