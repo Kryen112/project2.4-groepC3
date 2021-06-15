@@ -1,6 +1,26 @@
+.buttonswrapper {
+    resize: both;
+    height: 100%;
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .unregisteredButton {
-    font-size: 200px;
+    font-size: 40px;
     text-align: center;
     margin: auto;
     display: flex;
+}
+
+.imagewrapper {
+    background-color:rgb(255, 242, 226);
+}
+
+.frontpageimage {
+    resize: both;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

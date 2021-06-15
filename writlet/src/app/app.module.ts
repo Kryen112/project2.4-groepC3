@@ -16,6 +16,7 @@ import { HelpComponent } from './help/help.component';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { environment } from '../environments/environment';
     AboutComponent,
     TermsconditionsComponent,
     ContactComponent,
-    HelpComponent
+    HelpComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

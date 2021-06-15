@@ -1,8 +1,13 @@
-<app-header *ngIf="checkLoggedIn()"></app-header>
+<app-header></app-header>
 
-<router-outlet *ngIf="checkLoggedIn()"></router-outlet>
+<router-outlet></router-outlet>
 
-<button *ngIf="!checkLoggedIn()" class="unregisteredButton">inloggen</button>
-<button *ngIf="!checkLoggedIn()" class="unregisteredButton">registreren</button>
+<div *ngIf="!checkLoggedIn()" class="imagewrapper">
+    <img src="https://cdn.discordapp.com/attachments/833688204674203658/853586796406112276/unknown.png" alt="Writlet image" class="frontpageimage">
+</div>
+<div *ngIf="!checkLoggedIn()" class="buttonswrapper">
+    <button class="unregisteredButton"><a routerLink="login">inloggen</a></button>
+    <button class="unregisteredButton"><a routerLink="register">registreren</a></button>
+</div>
 
 <app-footer></app-footer>
