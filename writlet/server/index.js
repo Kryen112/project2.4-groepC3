@@ -102,7 +102,7 @@ app.post('/api/register', function (req, res) {
             const db = client.db("writlet");
             let user = { name: name, password: password };
             db.collection('gebruiker').insertOne(user).then((doc) => {
-              res.sendStatus(200);
+              res.status(200).json({ message: "user created" });
             }).finally(() => {
               client.close();
             });

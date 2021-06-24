@@ -14,7 +14,7 @@ export class AuthService {
     constructor(private http: HttpClient) {
     }
 
-    login(name:string, password:string ) {
+    login(name:string, password:string) {
         return this.http.post<User>(API_URL+'login', {name, password})
             .pipe (
                 tap (
@@ -23,6 +23,21 @@ export class AuthService {
                 ),
                 shareReplay()
             );
+    }
+
+    register(name:string, password:string) {
+      return this.http.post<User>(API_URL+'register', {name, password})
+            .pipe (
+                tap (
+                    res => this.setUser(res),
+                    err => this.handleError(err),
+                ),
+                shareReplay()
+            );
+    }
+
+    private setUser(authResult: any) {
+      return authResult;
     }
 
     public isLoggedIn() {
@@ -55,6 +70,7 @@ export class AuthService {
       let obj = jwt_decode.default(jwt);
       return obj["name"];
     }
+
     friend(user:string, friend:string ) {
       return this.http.post<Friend>(API_URL+'friendlist', {user, friend})
         .pipe (
@@ -65,6 +81,7 @@ export class AuthService {
           shareReplay()
       );
     }
+
     private getFriend(authResult: any) {
       return authResult;
     }
