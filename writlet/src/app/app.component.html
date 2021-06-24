@@ -15,9 +15,10 @@
     </div>
 
   <div *ngIf="checkHomeScreen() && checkLoggedIn()">
-    <img src="assets/img/writeletters.jpg" alt="write letters" class="homepageimages"><br>
-    <img src="assets/img/checkLetters.jpg" alt="check letters" class="homepageimages"><br>
-    <img src="assets/img/penpals.jpg" alt="penpals" class="homepageimages">
+    <img src="assets/img/writletlogotransparent.png" alt="Writlet image" class="frontpageimage">
+    <img src="assets/img/writeLetters.png" alt="write letters" class="homepageimages" routerLink="/secret/letter">
+    <img src="assets/img/checkLetters.png" alt="check letters" class="homepageimages" routerLink="/secret/letterbox">
+    <img src="assets/img/penpals.png" alt="penpals" class="homepageimages" routerLink="/secret/penpals">
   </div>
 
     <app-footer></app-footer>
