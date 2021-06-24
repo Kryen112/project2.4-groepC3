@@ -1,11 +1,12 @@
 <div>
   <ul>
     <li><a routerLink="home">Home</a></li>
-    <li *ngIf="checkLoggedIn()"><a href="">Mailbox</a></li>
-    <li *ngIf="checkLoggedIn()"><a href="">User</a></li>
-    <li *ngIf="checkLoggedIn()"><a routerLink="secret">Writ</a></li>
-    <li *ngIf="!checkLoggedIn()"><a routerLink="login">Login</a></li>
+    <li *ngIf="checkLoggedIn()"><a routerLink="secret/letterbox">Letterbox</a></li>
+    <li *ngIf="checkLoggedIn()"><a routerLink="secret/user">User</a></li>
+    <li *ngIf="checkLoggedIn()"><a routerLink="secret/penpals">Pen Pals</a></li>
+    <li *ngIf="checkLoggedIn()"><a routerLink="secret/letter">Writ</a></li>
     <li *ngIf="checkLoggedIn()" (click)="logout()"><a>Logout</a></li>
+    <li *ngIf="!checkLoggedIn()"><a routerLink="login">Login</a></li>
   </ul>
   <br/>
 </div>

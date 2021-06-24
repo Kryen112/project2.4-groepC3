@@ -1,13 +1,13 @@
-<app-header *ngIf="!checkHomeScreen()"></app-header>
+<app-header *ngIf="!checkHomeScreen() || checkLoggedIn()"></app-header>
 
 <div class="mainPage">
 
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 
-<div *ngIf="checkHomeScreen()" class="imagewrapper">
-    <img src="https://cdn.discordapp.com/attachments/833688204674203658/853586796406112276/unknown.png" alt="Writlet image" class="frontpageimage">
+<div *ngIf="checkHomeScreen() && !checkLoggedIn()" class="imagewrapper">
+    <img src="assets\img\writletlogotransparent.png" alt="Writlet image" class="frontpageimage">
 </div>
-<div *ngIf="checkHomeScreen()" class="buttonswrapper">
+<div *ngIf="checkHomeScreen() && !checkLoggedIn()" class="buttonswrapper">
     <button class="unregisteredButton"><a routerLink="login">inloggen</a></button>
     <button class="unregisteredButton"><a routerLink="register">registreren</a></button>
 </div>
