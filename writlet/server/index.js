@@ -162,6 +162,7 @@ app.post('/api/mymail', function (req, res) {
   if (req.body.name) {
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
+      console.log("DEBUG: we zijn in api/mymail");
       const db = client.db("writlet");
       let collection = db.collection('mail');
       let query = {"letter.recipient": req.body.name}
