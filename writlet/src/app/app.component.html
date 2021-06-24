@@ -13,7 +13,13 @@
         <button class="unregisteredButton" id="login" routerLink="login">Login</button>
         <button class="unregisteredButton" id="register" routerLink="register">Register</button>
     </div>
-    
+
+  <div *ngIf="checkHomeScreen() && checkLoggedIn()">
+    <img src="assets/img/writeletters.jpg" alt="write letters" class="homepageimages"><br>
+    <img src="assets/img/checkLetters.jpg" alt="check letters" class="homepageimages"><br>
+    <img src="assets/img/penpals.jpg" alt="penpals" class="homepageimages">
+  </div>
+
     <app-footer></app-footer>
 </div>
 
