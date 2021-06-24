@@ -63,3 +63,11 @@ a {
     height: auto;
     max-width: 100%;
 }
+
+
+.homepageimages {
+  resize: both;
+  width: 30%;
+  cursor: pointer;
+  margin: 10% 1% 1%;
+}
