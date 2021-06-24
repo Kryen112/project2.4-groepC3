@@ -21,3 +21,10 @@ li a {
 li a:hover {
   background-color: #111;
 }
+
+div {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}

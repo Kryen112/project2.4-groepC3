@@ -1,3 +1,10 @@
+.mainPage {
+  width: 70vw;
+  height: 100vh;
+  margin: 20px auto -100px;
+  background-color: #fff2e2;
+}
+
 .buttonswrapper {
     margin-left: auto;
     margin-right: auto;
@@ -14,7 +21,7 @@
 }
 
 .imagewrapper {
-    background-color: #fff3e1;
+    background-color: #fff2e2;
 }
 
 .frontpageimage {
