@@ -7,14 +7,16 @@ import {AboutComponent} from "./about/about.component";
 import {TermsconditionsComponent} from "./termsconditions/termsconditions.component";
 import {ContactComponent} from "./contact/contact.component";
 import {HelpComponent} from "./help/help.component";
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'about', component: AboutComponent},
-  { path: 'termsconditions', component: TermsconditionsComponent},
-  { path: 'contact', component: ContactComponent},
-  { path: 'help', component: HelpComponent},
+  { path: 'about', component: AboutComponent },
+  { path: 'termsconditions', component: TermsconditionsComponent },
+  { path: 'contact', component: ContactComponent },
+  { path: 'help', component: HelpComponent },
+  { path: 'register', component: RegisterComponent },
   {
     path: 'login',
     loadChildren: () => import('./login/login.module').then(m => m.LoginModule)

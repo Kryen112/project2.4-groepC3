@@ -1,0 +1,26 @@
+.buttonswrapper {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 30px;
+}
+
+.unregisteredButton {
+    font-size: 40px;
+    text-align: center;
+    margin: auto;
+    display: flex;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.imagewrapper {
+    background-color: #fff3e1;
+}
+
+.frontpageimage {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    max-width: 100%;
+}
