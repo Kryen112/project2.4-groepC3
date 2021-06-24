@@ -1,15 +1,17 @@
-<app-header *ngIf="!checkHomeScreen() || checkLoggedIn()"></app-header>
+
 
 <div class="mainPage">
+  <app-header *ngIf="!checkHomeScreen()"></app-header>
 
-    <router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 
-<div *ngIf="checkHomeScreen() && !checkLoggedIn()" class="imagewrapper">
-    <img src="assets\img\writletlogotransparent.png" alt="Writlet image" class="frontpageimage">
+<div *ngIf="checkHomeScreen()" class="imagewrapper">
+    <img src="assets/img/writletlogotransparent.png" alt="Writlet image" class="frontpageimage">
 </div>
-<div *ngIf="checkHomeScreen() && !checkLoggedIn()" class="buttonswrapper">
-    <button class="unregisteredButton"><a routerLink="login">inloggen</a></button>
-    <button class="unregisteredButton"><a routerLink="register">registreren</a></button>
+<div *ngIf="checkHomeScreen()" class="buttonswrapper">
+    <button class="unregisteredButton" id="login" routerLink="login">Login</button>
+    <button class="unregisteredButton" id="register" routerLink="register">Register</button>
 </div>
+  <app-footer></app-footer>
 </div>
-<app-footer></app-footer>
+

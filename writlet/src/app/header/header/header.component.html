@@ -1,5 +1,7 @@
 <div>
+
   <ul>
+    <a routerLink="home" class="headerLogo"><img src="assets/img/headerlogo.png" height="48px" width="48px"></a>
     <li><a routerLink="home">Home</a></li>
     <li *ngIf="checkLoggedIn()"><a routerLink="secret/letterbox">Letterbox</a></li>
     <li *ngIf="checkLoggedIn()"><a routerLink="secret/user">User</a></li>
