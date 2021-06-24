@@ -1,10 +1,7 @@
 .buttonswrapper {
-    resize: both;
-    height: 100%;
-    width: 50%;
-    display: block;
     margin-left: auto;
     margin-right: auto;
+    padding: 30px;
 }
 
 .unregisteredButton {
@@ -12,15 +9,18 @@
     text-align: center;
     margin: auto;
     display: flex;
+    padding: 10px;
+    margin-top: 10px;
 }
 
 .imagewrapper {
-    background-color:rgb(255, 242, 226);
+    background-color: #fff3e1;
 }
 
 .frontpageimage {
-    resize: both;
     display: block;
     margin-left: auto;
     margin-right: auto;
+    height: auto;
+    max-width: 100%;
 }
