@@ -158,6 +158,25 @@ app.post('/api/mail', function (req, res) {
   }
 });
 
+app.post('/api/mymail', function (req, res) {
+  if (req.body.name) {
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+      if (err) throw err;
+      const db = client.db("writlet");
+      let collection = db.collection('mail');
+      let query = {"letter.recipient": req.body.name}
+      collection.find(query).toArray(function (error, data) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(data);
+          res.status(200).json(data);
+        }
+      });
+    });
+  }
+});
+
 app.route('/api/secret')
 .get(checkIfAuthenticated, function (req, res) {
 res.json({ message: "Success! You can not see this without a token" });
