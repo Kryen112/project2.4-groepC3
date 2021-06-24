@@ -53,4 +53,13 @@ export class LetterComponent implements OnInit {
         );
     }
   }
+
+  setRecipientPlaceholder() {
+    if (this.recipient == null) {
+      return "Dear Recipient,";
+    }
+    return "Dear " + this.recipient + ",";
+  }
+
+
 }
