@@ -12,9 +12,9 @@ export class LoginComponent implements OnInit {
   form:FormGroup;
   errorColor:string = "";
 
-  constructor(private fb:FormBuilder, 
-              private authService: AuthService, 
-              private router: Router) { 
+  constructor(private fb:FormBuilder,
+              private authService: AuthService,
+              private router: Router) {
 
     this.form = this.fb.group({
       name: ['',Validators.required],
@@ -32,7 +32,6 @@ export class LoginComponent implements OnInit {
       this.authService.login(val.name, val.password)
         .subscribe(
           () => {
-            console.log("User is logged in");
             this.router.navigate(['secret'])
           },
           () => {

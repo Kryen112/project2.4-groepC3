@@ -10,19 +10,19 @@ const API_URL = 'http://localhost:5000/api/'
 @Injectable({
     providedIn: 'root'
 })
-export class AuthService {     
+export class AuthService {
     constructor(private http: HttpClient) {
     }
-    
+
     login(name:string, password:string ) {
         return this.http.post<User>(API_URL+'login', {name, password})
             .pipe (
-                tap ( 
+                tap (
                     res => this.setSession(res),
                     err => this.handleError(err),
                 ),
                 shareReplay()
-            )
+            );
     }
 
     public isLoggedIn() {
@@ -30,37 +30,51 @@ export class AuthService {
     }
 
     private setSession(authResult: any) {
-        console.log("Setting session");
-
         const expiresAt = moment().add(authResult.expiresIn, 'milliseconds');
-
         localStorage.setItem('id_token', authResult.token);
         localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
     }
 
     public logout() {
-        console.log("Logging out");
-
         localStorage.removeItem('id_token');
         localStorage.removeItem('expires_at');
     }
 
     public getExpiration() {
-        console.log("Get experiation as json...");
-
         const expiration = localStorage.getItem('expires_at') + "";
         const expiresAt = JSON.parse(expiration);
-
         return moment(expiresAt);
-    } 
+    }
 
     private handleError(error: any) {
-        console.error("ERROR...");
         console.log(error);
+    }
+
+    public getUser(){
+      const jwt = localStorage.getItem('id_token');
+      let obj = jwt_decode.default(jwt);
+      return obj["name"];
+    }
+    friend(user:string, friend:string ) {
+      return this.http.post<Friend>(API_URL+'friendlist', {user, friend})
+        .pipe (
+          tap (
+            res => this.getFriend(res),
+            err => this.handleError(err),
+          ),
+          shareReplay()
+      );
+    }
+    private getFriend(authResult: any) {
+      return authResult;
     }
 }
 
 interface User {
-    name:string,
-    password:string,
+    name: string,
+    password: string,
+}
+interface Friend {
+  user: string,
+  friend: string
 }
