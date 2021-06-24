@@ -25,12 +25,15 @@ export class CommunicationService {
         shareReplay()
       );
   }
+
   private sendLetter(authResult: any) {
     return authResult;
   }
+
   private handleError(error: any) {
     console.log(error);
   }
+
   getMail(user: string) {
     return this.http.post<User>(API_URL+'mymail', {user})
       .pipe (
@@ -41,17 +44,20 @@ export class CommunicationService {
         shareReplay()
       );
   }
+
   private myMail(authResult: any) {
+    console.log('authResult: ' + authResult);
     return authResult;
   }
 
   letter = new BehaviorSubject(null);
   sharedLetter = this.letter.asObservable();
-
 }
+
 interface Letter {
   letter:any
 }
+
 interface User {
   user:string
 }

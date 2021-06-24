@@ -17,6 +17,7 @@ export class LetterboxComponent implements OnInit {
 
   getMail(){
     let user = this.authService.getUser();
+    console.log('username: ' + user);
     console.log(this.commService.getMail(user));
   }
 }
