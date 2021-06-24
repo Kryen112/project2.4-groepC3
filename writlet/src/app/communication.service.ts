@@ -31,16 +31,29 @@ export class CommunicationService {
   private handleError(error: any) {
     console.log(error);
   }
+  getMail(user: string) {
+    return this.http.post<User>(API_URL+'mymail', {user})
+      .pipe (
+        tap (
+          res => this.myMail(res),
+          err => this.handleError(err),
+        ),
+        shareReplay()
+      );
+  }
+  private myMail(authResult: any) {
+    return authResult;
+  }
+
   letter = new BehaviorSubject(null);
   sharedLetter = this.letter.asObservable();
-
-  nextLetter(letter){
-    this.letter.next(letter);
-  }
 
 }
 interface Letter {
   letter:any
+}
+interface User {
+  user:string
 }
 
 

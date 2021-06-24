@@ -32,13 +32,6 @@ export class LetterComponent implements OnInit {
             this.time = new Date();
             this.letterTitle = title;
             this.letterText = text;
-            this.commService.nextLetter(
-              {username: this.username,
-                recipient: this.recipient,
-                title: this.letterTitle,
-                text: this.letterText,
-                time: this.time
-              });
             this.commService.mail(
               {username: this.username,
                 recipient: this.recipient,

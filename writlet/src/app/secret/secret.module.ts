@@ -9,7 +9,7 @@ import { LetterboxComponent } from './letterbox/letterbox.component';
 import { PenpalsComponent } from './penpals/penpals.component';
 import { UserComponent } from './user/user.component';
 
-const secretRoutes:Routes = [
+const secretRoutes: Routes = [
     { path: '', redirectTo: 'letter' },
     { path: 'letter', component: LetterComponent },
     { path: 'view', component: ViewComponent },

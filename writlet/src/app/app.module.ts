@@ -17,6 +17,9 @@ import { HelpComponent } from './help/help.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { RegisterComponent } from './register/register.component';
+import {LetterboxComponent} from "./secret/letterbox/letterbox.component";
+import {PenpalsComponent} from "./secret/penpals/penpals.component";
+import {UserComponent} from "./secret/user/user.component";
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import { RegisterComponent } from './register/register.component';
     TermsconditionsComponent,
     ContactComponent,
     HelpComponent,
-    RegisterComponent
+    RegisterComponent,
+    LetterboxComponent,
+    PenpalsComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
