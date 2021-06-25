@@ -158,21 +158,22 @@ app.post('/api/mail', function (req, res) {
   }
 });
 
-app.post('/api/mymail', function (req, res) {
-  if (req.body.name) {
+app.get('/api/mymail/:user', function (req, res) {
+  let user = req.params.user;
+  if (user) {
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       console.log("DEBUG: we zijn in api/mymail");
       const db = client.db("writlet");
       let collection = db.collection('mail');
-      let query = {"letter.recipient": req.body.name}
+      let query = {"letter.recipient": user}
       collection.find(query).toArray(function (error, data) {
         if (error) {
           console.log(error);
         } else {
-          console.log(data);
           res.status(200).json(data);
         }
+        client.close();
       });
     });
   }

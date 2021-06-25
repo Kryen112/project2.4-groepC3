@@ -35,7 +35,7 @@ export class CommunicationService {
   }
 
   getMail(user: string) {
-    return this.http.post<User>(API_URL+'mymail', {user})
+    return this.http.get<any[]>(API_URL+'mymail/'+user)
       .pipe (
         tap (
           res => this.myMail(res),
@@ -58,8 +58,6 @@ interface Letter {
   letter:any
 }
 
-interface User {
-  user:string
-}
+
 
 

@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class LetterboxComponent implements OnInit {
   username:string;
+  data:Array<any>;
 
   constructor(public commService:CommunicationService,
               private authService: AuthService) { }
@@ -18,6 +19,12 @@ export class LetterboxComponent implements OnInit {
   getMail(){
     let user = this.authService.getUser();
     console.log('username: ' + user);
-    console.log(this.commService.getMail(user));
+    console.log(user);
+    this.commService.getMail(user)
+      .subscribe(
+        (brieven) => {
+          this.data = brieven;
+          console.log(this.data);
+        });
   }
 }
