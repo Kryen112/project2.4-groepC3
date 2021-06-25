@@ -12,7 +12,9 @@ export class LetterComponent implements OnInit {
   recipient:string;
   letterTitle:string;
   letterText:string;
-  time;
+  send: Date;
+  arrival: Date;
+
 
 
 
@@ -29,7 +31,9 @@ export class LetterComponent implements OnInit {
         .subscribe(
           () => {
             this.username = user;
-            this.time = new Date();
+            this.send = new Date();
+            this.arrival = new Date();
+            this.arrival.setDate(this.send.getDate() + 1);
             this.letterTitle = title;
             this.letterText = text;
             this.commService.mail(
@@ -37,7 +41,7 @@ export class LetterComponent implements OnInit {
                 recipient: this.recipient,
                 title: this.letterTitle,
                 text: this.letterText,
-                time: this.time
+                time: this.arrival
               })
               .subscribe(
               () => {
