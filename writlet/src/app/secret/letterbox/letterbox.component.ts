@@ -14,7 +14,9 @@ export class LetterboxComponent implements OnInit {
   constructor(public commService:CommunicationService,
               private authService: AuthService) { }
 
-  ngOnInit(): void {  }
+  ngOnInit(): void {
+    this.getMail();
+  }
 
   getMail(){
     let user = this.authService.getUser();

@@ -8,6 +8,7 @@ import { ViewComponent } from './view/view.component';
 import { LetterboxComponent } from './letterbox/letterbox.component';
 import { PenpalsComponent } from './penpals/penpals.component';
 import { UserComponent } from './user/user.component';
+import { ReadComponent } from './read/read.component';
 
 const secretRoutes: Routes = [
     { path: '', redirectTo: 'letter' },
@@ -15,12 +16,14 @@ const secretRoutes: Routes = [
     { path: 'view', component: ViewComponent },
     { path: 'letterbox', component: LetterboxComponent },
     { path: 'penpals', component: PenpalsComponent },
-    { path: 'user', component: UserComponent }
+    { path: 'user', component: UserComponent },
+    { path: 'read/:id', component: ReadComponent}
 ]
 
 @NgModule({
   declarations: [
-    SecretComponent
+    SecretComponent,
+    ReadComponent
   ],
   imports: [
     CommonModule,
