@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {CommunicationService} from "../../../communication.service";
+import { CommunicationService } from "../../../communication.service";
 import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
@@ -8,24 +8,20 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./letter.component.css']
 })
 export class LetterComponent implements OnInit {
-  username:string;
-  recipient:string;
-  letterTitle:string;
-  letterText:string;
+  username: string;
+  recipient: string;
+  letterTitle: string;
+  letterText: string;
   send: Date;
   arrival: Date;
 
-
-
-
-  constructor(public commService:CommunicationService,
+  constructor(private commService: CommunicationService,
               private authService: AuthService) { }
 
-  ngOnInit(): void {  }
+  ngOnInit(): void { }
 
-
-  sendLetter(recipient, title, text){
-    if(recipient && title && text){
+  sendLetter(recipient: string, title: string, text: string): void {
+    if(recipient && title && text) {
       let user = this.authService.getUser();
       this.authService.friend(user, recipient)
         .subscribe(
@@ -51,12 +47,11 @@ export class LetterComponent implements OnInit {
     }
   }
 
-  setRecipientPlaceholder() {
-    if (this.recipient == null) {
+  setRecipientPlaceholder(): string {
+    if (this.recipient === null) {
       return "Dear Recipient,";
     }
     return "Dear " + this.recipient + ",";
   }
-
 
 }

@@ -16,18 +16,30 @@ export class CommunicationService {
   }
 
   mail(letter: { recipient: string; text: string; time: any; title: string; username: string }) {
-    return this.http.post<Letter>(API_URL+'mail', {letter})
-      .pipe (
-        tap (
-          res => this.sendLetter(res),
+    return this.http.post<Letter>(API_URL + 'mail', {letter})
+      .pipe(
+        tap(
+          res => this.sendData(res),
           err => this.handleError(err),
         ),
         shareReplay()
       );
   }
 
-  private sendLetter(authResult: any) {
+  private sendData(authResult: any) {
     return authResult;
+  }
+
+  addPenPal(user: string, penpal: string) {
+    console.log("addpenpal in commservice");
+    return this.http.post<Penpals>(API_URL + 'penpals', {user, penpal})
+      .pipe(
+        tap(
+          res => this.sendData(res),
+          err => this.handleError(err),
+        ),
+        shareReplay()
+      );
   }
 
   private handleError(error: any) {
@@ -56,6 +68,10 @@ export class CommunicationService {
 
 interface Letter {
   letter:any
+}
+
+interface Penpals {
+  name: string
 }
 
 
