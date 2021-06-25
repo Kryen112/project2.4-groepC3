@@ -29,9 +29,10 @@ export class RegisterComponent implements OnInit {
     const val = this.form.value;
 
     if (val.name && val.password) {
-      this.authService.register(val.name, val.password)
+      this.authService.register(val.name, val.password, [val.name])
         .subscribe(
           () => {
+            // EERST NOG AUTOMATISCH INLOGGEN
             //this.router.navigate(['secret'])
           },
           () => {

@@ -25,8 +25,8 @@ export class AuthService {
             );
     }
 
-    register(name:string, password:string) {
-      return this.http.post<User>(API_URL+'register', {name, password})
+    register(name:string, password:string, penpalList: Array<string>) {
+      return this.http.post<User>(API_URL+'register', {name, password, penpalList})
             .pipe (
                 tap (
                     res => this.setUser(res),
@@ -34,6 +34,33 @@ export class AuthService {
                 ),
                 shareReplay()
             );
+    }
+
+    friend(user:string, friend:string) {
+      return this.http.post<Friend>(API_URL + 'friendlist', {user, friend})
+        .pipe(
+          tap(
+            res => this.getFriend(res),
+            err => this.handleError(err),
+          ),
+          shareReplay()
+      );
+    }
+
+    addPenPal(user: string, penpal: string) {
+      console.log("addpenpal in authservice");
+      return this.http.post<Penpal>(API_URL + 'penpals', {user, penpal})
+        .pipe(
+          tap(
+            res => this.getFriend(res),
+            err => this.handleError(err),
+          ),
+          shareReplay()
+      );
+    }
+
+    private getFriend(authResult: any) {
+      return authResult;
     }
 
     private setUser(authResult: any) {
@@ -65,25 +92,10 @@ export class AuthService {
         console.log(error);
     }
 
-    public getUser(){
+    public getUser() {
       const jwt = localStorage.getItem('id_token');
       let obj = jwt_decode.default(jwt);
       return obj["name"];
-    }
-
-    friend(user:string, friend:string ) {
-      return this.http.post<Friend>(API_URL+'friendlist', {user, friend})
-        .pipe (
-          tap (
-            res => this.getFriend(res),
-            err => this.handleError(err),
-          ),
-          shareReplay()
-      );
-    }
-
-    private getFriend(authResult: any) {
-      return authResult;
     }
 }
 
@@ -91,7 +103,13 @@ interface User {
     name: string,
     password: string,
 }
+
 interface Friend {
   user: string,
   friend: string
+}
+
+interface Penpal {
+  user: string,
+  penpal: string
 }

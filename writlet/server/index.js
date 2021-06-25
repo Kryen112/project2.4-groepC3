@@ -9,8 +9,8 @@ const url = 'mongodb://localhost:27017';
 
 MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
   if (err) throw err;
-  const db = client.db("writlet");
-  let collections = ["gebruiker", "mail"];
+  const db = client.db('writlet');
+  let collections = ['gebruiker', 'mail'];
   for(let i = 0; i < collections.length; i++){
     db.listCollections({name: collections[i]})
       .next(function(err, collinfo) {
@@ -28,9 +28,8 @@ MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (e
   }
 });
 
-
 const signOptions = {
-  expiresIn: "1d",
+  expiresIn: '1d',
   algorithm: 'ES256'
 };
 
@@ -42,7 +41,6 @@ const checkIfAuthenticated = expressJwt({
 });
 
 // Express
-
 const app = express();
 app.use(cors());
 
@@ -90,6 +88,7 @@ app.post('/api/register', function (req, res) {
   if (req.body.name && req.body.password) {
     let name = (req.body.name).toLowerCase();
     let password = req.body.password;
+    let penpalList = req.body.penpalList
     MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
@@ -100,7 +99,7 @@ app.post('/api/register', function (req, res) {
           MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
             if (err) throw err;
             const db = client.db("writlet");
-            let user = { name: name, password: password };
+            let user = { name: name, password: password, penpalList: penpalList };
             db.collection('gebruiker').insertOne(user).then((doc) => {
               res.status(200).json({ message: "user created" });
             }).finally(() => {
@@ -163,7 +162,6 @@ app.get('/api/mymail/:user', function (req, res) {
   if (user) {
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      console.log("DEBUG: we zijn in api/mymail");
       const db = client.db("writlet");
       let collection = db.collection('mail');
       let query = {"letter.recipient": user}
@@ -173,6 +171,42 @@ app.get('/api/mymail/:user', function (req, res) {
         } else {
           res.status(200).json(data);
         }
+        client.close();
+      });
+    });
+  }
+});
+
+app.get('api/penpals/:user', function(req, res) {
+  let user = req.params.user;
+  if (user) {
+    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+      if (err) throw err;
+      const db = client.db("writlet");
+      let collection = db.collection('penpals');
+      let query = {user}
+      collection.find(query).toArray(function (error, data) {
+        if (error) {
+          console.log(error);
+        } else {
+          res.status(200).json(data);
+        }
+        client.close();
+      });
+    });
+  }
+});
+
+app.post('/api/penpals', function (req, res) {
+  if (req.body.user && req.body.penpal) {
+    let currentUser = (req.body.user).toLowerCase();
+    let userToAdd = (req.body.penpal).toLowerCase();
+    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+      if (err) throw err;
+      const db = client.db("writlet");
+      db.collection('gebruiker').updateOne({name: currentUser}, {$addToSet: { penpalList: userToAdd }}).then((doc) => {
+        res.status(200).json({ message: "penpal added" });
+      }).finally(() => {
         client.close();
       });
     });
