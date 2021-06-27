@@ -1,7 +1,26 @@
 <form [formGroup]="form">
-    <input type="text" placeholder="Gebruikersnaam" required autofocus
-            [style.backgroundColor]="errorColor" formControlName="name">
-    <input type="password" placeholder="Wachtwoord" required
-            [style.backgroundColor]="errorColor" formControlName="password">
-    <button type="submit" (click)="register()">Register</button>
+  <table>
+    <tr>
+      <img class="logo" src="assets/img/writletlogotransparent.png" alt="Logo">
+      <img class="mobileLogo" src="assets/img/headerlogo.png" alt="Logo">
+      <img class="textLogo" src="assets/img/writletlogo.png" alt="LogoText">
+    </tr>
+    <tr class="register">
+        Username
+    </tr>
+    <tr class="register">
+      <input type="text" placeholder="Username" required autofocus
+             [style.backgroundColor]="errorColor" formControlName="name">
+    </tr>
+    <tr class="register">
+        Password
+    </tr>
+    <tr class="register">
+      <input type="password" placeholder="Password" required
+             [style.backgroundColor]="errorColor" formControlName="password">
+    </tr>
+    <tr class="register">
+      <button type="submit" (click)="register()">Register</button>
+    </tr>
+  </table>
 </form>

@@ -32,10 +32,10 @@ export class LoginComponent implements OnInit {
       this.authService.login(val.name, val.password)
         .subscribe(
           () => {
-            this.router.navigate(['secret'])
+            this.router.navigate(['home'])
           },
           () => {
-            console.error('FOUT: ongeldige gegevens')
+            alert("Password does not match the username.")
             this.errorColor="#ffccff"
           }
         );

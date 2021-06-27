@@ -9,10 +9,14 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class HeaderComponent implements OnInit {
 
+  dropDownActive;
+  show;
   constructor(private auth: AuthService,
               private router: Router) { }
 
   ngOnInit(): void {
+    this.dropDownActive = false;
+    this.show = false;
   }
 
   checkLoggedIn(): boolean {
@@ -22,5 +26,11 @@ export class HeaderComponent implements OnInit {
   logout(): void {
     this.auth.logout();
     this.router.navigate(['home']);
+  }
+
+  toggleDropDown() {
+    this.dropDownActive = !this.dropDownActive;
+    this.show = !this.show;
+
   }
 }

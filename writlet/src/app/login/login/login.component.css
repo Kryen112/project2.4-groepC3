@@ -1,35 +1,101 @@
-form {
-  display: flex;
-  margin-top: 5%;
+/* mobile */
+.logo {
+  display: none;
 }
 
-img {
-  padding-bottom: 3%;
-}
-
-table {
+.mobileLogo {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 40%;
+  width: 30vw;
+  margin-top: 5vh;
 }
 
-tr {
+.textLogo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  resize: both;
+  margin-top: 2vh;
+
+}
+
+.login {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 50%;
   text-align: center;
+  font-weight: bold;
+  margin-bottom: 2vh;
 }
 
 button {
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  padding: 5px;
   transition-duration: 0.4s;
   border-radius: 4px;
-  background-color: white;
-  color: black;
   border: 2px solid #555555;
-  margin-top: 2%;
-  width: 10%;
-  height: 5%;
+  background-color: #373331;
+  color: white;
+
+  margin-top: 1vh;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-button:hover {
-  background-color: #555555;
-  color: white;
+
+/* desktop */
+@media screen and (min-width: 768px) {
+
+  .textLogo {
+    display: none;
+  }
+
+  .mobileLogo {
+    display: none;
+  }
+
+  .logo {
+    display: block;
+  }
+  form {
+    display: flex;
+    margin-top: 5%;
+  }
+
+  img {
+    padding-bottom: 3%;
+  }
+
+  table {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+  }
+
+  tr {
+    text-align: center;
+  }
+
+  button {
+    transition-duration: 0.4s;
+    border-radius: 4px;
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+    margin-top: 2%;
+    width: 20%;
+    height: 5%;
+  }
+
+  button:hover {
+    background-color: #555555;
+    color: white;
+  }
 }
+

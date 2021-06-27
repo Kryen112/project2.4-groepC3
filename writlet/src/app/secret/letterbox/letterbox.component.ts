@@ -29,4 +29,9 @@ export class LetterboxComponent implements OnInit {
           console.log(this.data);
         });
   }
+
+  parseDate(dateString: string) {
+    let date = new Date(dateString)
+    return date.toDateString()
+  }
 }

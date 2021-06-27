@@ -44,6 +44,13 @@ export class LetterComponent implements OnInit {
               });
           }
         );
+      alert("Letter sent.");
+    } else if (recipient == null) {
+      alert("There is no recipient to send your letter to.");
+    } else if (title == null) {
+      alert("Please fill in a title for your letter.");
+    } else if (text == null) {
+      alert("There is no letter to send.")
     }
   }
 
@@ -52,6 +59,10 @@ export class LetterComponent implements OnInit {
       return "Dear Recipient,";
     }
     return "Dear " + this.recipient + ",";
+  }
+
+  getCurrentDate(): string {
+    return new Date().toDateString()
   }
 
 }

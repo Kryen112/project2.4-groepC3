@@ -1,5 +1,22 @@
-<div>
+<div class="mobile">
+  <div class="headerBar">
+    <div class="dropdown">
+      <img src="assets/img/menuicon.png" (click)="toggleDropDown()" class="dropmenu">
+      <div *ngIf="dropDownActive" class="dropdown-content" [ngClass]="{'show': show}">
+        <a *ngIf="checkLoggedIn()" routerLink="secret/letterbox" (click)="toggleDropDown()">Letterbox</a>
+        <a *ngIf="checkLoggedIn()" routerLink="secret/user" (click)="toggleDropDown()">User</a>
+        <a *ngIf="checkLoggedIn()" routerLink="secret/penpals" (click)="toggleDropDown()">Pen Pals</a>
+        <a *ngIf="checkLoggedIn()" routerLink="secret/letter" (click)="toggleDropDown()">Writ</a>
+        <a *ngIf="checkLoggedIn()" (click)="logout() && toggleDropDown()" >Logout</a>
+        <a *ngIf="!checkLoggedIn()" routerLink="login" (click)="toggleDropDown()">Login</a>
+        <a *ngIf="!checkLoggedIn()" routerLink="register" (click)="toggleDropDown()">Register</a>
+      </div>
+    </div>
+    <img src="assets/img/headerlogo.png" routerLink="home" height="48px" width="48px" class="headerLogo">
+  </div>
+</div>
 
+<div class="desktop">
   <ul>
     <a routerLink="home" class="headerLogo"><img src="assets/img/headerlogo.png" height="48px" width="48px"></a>
     <li><a routerLink="home">Home</a></li>

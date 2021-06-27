@@ -1,5 +1,4 @@
 
-
 <div class="mainPage">
     <app-header *ngIf="!checkHomeScreen() || checkLoggedIn()"></app-header>
 
@@ -10,8 +9,10 @@
     </div>
 
     <div *ngIf="checkHomeScreen() && !checkLoggedIn()" class="buttonswrapper">
-        <button class="unregisteredButton" id="login" routerLink="login">Login</button>
-        <button class="unregisteredButton" id="register" routerLink="register">Register</button>
+      <img class="mobileLogo" src="assets/img/headerlogo.png" alt="Logo">
+      <img class="textLogo" src="assets/img/writletlogo.png" alt="LogoText">
+      <button class="unregisteredButton" id="login" routerLink="login">Login</button>
+      <button class="unregisteredButton" id="register" routerLink="register">Register</button>
     </div>
 
   <div *ngIf="checkHomeScreen() && checkLoggedIn()">

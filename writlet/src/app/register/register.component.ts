@@ -32,14 +32,17 @@ export class RegisterComponent implements OnInit {
       this.authService.register(val.name, val.password, [val.name])
         .subscribe(
           () => {
-            // EERST NOG AUTOMATISCH INLOGGEN
-            //this.router.navigate(['secret'])
+            alert("Registration successful. You can now login.");
           },
           () => {
-            console.error('FOUT: ongeldige gegevens')
+            alert("Registration failed.");
             this.errorColor="#ffccff"
           }
         );
+    } else if (!val.name) {
+      alert("Please enter an available username.");
+    } else if (!val.password) {
+      alert("Please enter a password.");
     }
   }
 
