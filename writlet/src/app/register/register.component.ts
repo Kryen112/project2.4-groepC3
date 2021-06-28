@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
     const val = this.form.value;
 
     if (val.name && val.password) {
-      this.authService.register(val.name, val.password, [val.name])
+      this.authService.register(val.name, val.password)
         .subscribe(
           () => {
             alert("Registration successful. You can now login.");

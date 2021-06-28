@@ -10,7 +10,7 @@ const url = 'mongodb://localhost:27017';
 MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
   if (err) throw err;
   const db = client.db('writlet');
-  let collections = ['gebruiker', 'mail'];
+  let collections = ['users', 'mail'];
   for(let i = 0; i < collections.length; i++){
     db.listCollections({name: collections[i]})
       .next(function(err, collinfo) {
@@ -18,7 +18,7 @@ MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (e
           console.log(collections[i] + " exists");
         }
         else{
-          db.createCollection(collections[i]).then((doc) => {
+          db.createCollection(collections[i]).then(() => {
           }).finally(() => {
             client.close();
           });
@@ -60,7 +60,7 @@ app.post('/api/login', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
-      let collection = db.collection('gebruiker');
+      let collection = db.collection('users');
       let query = { name: name }
       collection.findOne(query).then((user) => {
         if (!user) {
@@ -88,11 +88,11 @@ app.post('/api/register', function (req, res) {
   if (req.body.name && req.body.password) {
     let name = (req.body.name).toLowerCase();
     let password = req.body.password;
-    let penpalList = req.body.penpalList
+    let penpalList = [name];
     MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
-      let collection = db.collection('gebruiker');
+      let collection = db.collection('users');
       let query = { name: name }
       collection.findOne(query).then((user) => {
         if (!user) {
@@ -100,7 +100,7 @@ app.post('/api/register', function (req, res) {
             if (err) throw err;
             const db = client.db("writlet");
             let user = { name: name, password: password, penpalList: penpalList };
-            db.collection('gebruiker').insertOne(user).then((doc) => {
+            db.collection('users').insertOne(user).then(() => {
               res.status(200).json({ message: "user created" });
             }).finally(() => {
               client.close();
@@ -117,24 +117,67 @@ app.post('/api/register', function (req, res) {
   }
 });
 
-app.post('/api/friendlist', function (req, res) {
-  if (req.body.user && req.body.friend) {
-    let user = (req.body.user).toLowerCase();
-    let friend = (req.body.friend).toLowerCase();
+//friendlist vervangen naar een get die kijkt of de user bestaat :)
+app.get('/api/users/:user', function (req, res) {
+  let username = req.params.user;
+  if(username) {
     MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
-      let collection = db.collection('gebruiker');
-      let query = { name: friend }
+      let collection = db.collection('users');
+      let query = { name: username }
       collection.findOne(query).then((user) => {
         if (!user) {
-          res.sendStatus(401);
+          res.status(404).json({ message: "user not found" });
         }
-        else if (user.name === friend) {
-          res.status(200).json({ message: "friend exist" });
+        else if (user.name === username) {
+          res.status(200).json({ message: "user exists" });
         } else {
           res.sendStatus(401);
         }
+      }).finally(() => {
+        client.close();
+      });
+    });
+  }
+});
+
+//geeft wachtwoord en username terug :)
+app.get('/api/userinfo/:user', function (req, res) {
+  let username = req.params.user;
+  if(username) {
+    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+      if (err) throw err;
+      const db = client.db("writlet");
+      let collection = db.collection('users');
+      let query = { name: username }
+      collection.findOne(query).then((user) => {
+        if (!user) {
+          res.status(404).json({ message: "user not found" });
+        }
+        else if (user.name === username) {
+          res.status(200).json({ name: user.name, password: user.password});
+        } else {
+          res.sendStatus(401);
+        }
+      }).finally(() => {
+        client.close();
+      });
+    });
+  }
+});
+
+//wachtwoord en username worden geupdate :)
+app.post('/api/userupdate', function (req, res) {
+  if (req.body.name && req.body.oldname && req.body.password) {
+    let user = (req.body.oldname).toLowerCase();
+    let newUser = (req.body.name).toLowerCase();
+    let password = req.body.password;
+    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+      if (err) throw err;
+      const db = client.db("writlet");
+      db.collection('users').updateOne({name: user, penpalList: user}, {$set: { name: newUser, password: password, "penpalList.$": newUser }}).then(() => {
+        res.status(200).json({ message: "information updated" });
       }).finally(() => {
         client.close();
       });
@@ -148,7 +191,7 @@ app.post('/api/mail', function (req, res) {
       if (err) throw err;
       const db = client.db("writlet");
       let letter = { letter: req.body.letter };
-      db.collection('mail').insertOne(letter).then((doc) => {
+      db.collection('mail').insertOne(letter).then(() => {
         res.status(200).json({ message: "mail send" });
       }).finally(() => {
         client.close();
@@ -158,13 +201,13 @@ app.post('/api/mail', function (req, res) {
 });
 
 app.get('/api/mymail/:user', function (req, res) {
-  let user = req.params.user;
-  if (user) {
+  let username = req.params.user;
+  if (username) {
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
       let collection = db.collection('mail');
-      let query = {"letter.recipient": user}
+      let query = {"letter.recipient": username}
       collection.find(query).toArray(function (error, data) {
         if (error) {
           console.log(error);
@@ -177,20 +220,23 @@ app.get('/api/mymail/:user', function (req, res) {
   }
 });
 
-app.get('api/penpals/:user', function(req, res) {
-  let user = req.params.user;
-  if (user) {
+//deze werkt nu en stuurt de penpals van de persoon terug :)
+app.get('/api/penpals/:user', function(req, res) {
+  let username = req.params.user;
+  if (username) {
     MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
-      let collection = db.collection('penpals');
-      let query = {user}
-      collection.find(query).toArray(function (error, data) {
-        if (error) {
-          console.log(error);
-        } else {
-          res.status(200).json(data);
+      let collection = db.collection('users');
+      let query = {name: username}
+      collection.findOne(query).then((user) => {
+        if (!user) {
+          res.sendStatus(401);
         }
+        else {
+          res.status(200).json(user.penpalList);
+        }
+      }).finally(() => {
         client.close();
       });
     });
@@ -204,7 +250,7 @@ app.post('/api/penpals', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
-      db.collection('gebruiker').updateOne({name: currentUser}, {$addToSet: { penpalList: userToAdd }}).then((doc) => {
+      db.collection('users').updateOne({name: currentUser}, {$addToSet: { penpalList: userToAdd }}).then(() => {
         res.status(200).json({ message: "penpal added" });
       }).finally(() => {
         client.close();
@@ -222,4 +268,5 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, function () {
 console.log("Express starting listening on port " + PORT);
+
 });
