@@ -50,45 +50,47 @@ export class UserComponent implements OnInit {
               alert("username already taken");
               return;
             }
-            this.authService.userInfo(this.authService.getUser())
-              .subscribe(
-                (info) => {
-                  this.data = info;
-                  this.oldname = this.data['name'];
-                  if(val.olderPassword === this.data['password']){
-                    if(!val.name){
-                      this.username = this.data['name'];
+            if(this.data['message'] === "user not found"){
+              this.authService.userInfo(this.authService.getUser())
+                .subscribe(
+                  (info) => {
+                    this.data = info;
+                    this.oldname = this.data['name'];
+                    if(val.olderPassword === this.data['password']){
+                      if(!val.name){
+                        this.username = this.data['name'];
+                      }
+                      if(val.name){
+                        this.username = val.name;
+                      }
+                      if(!val.newerPassword){
+                        this.password = this.data['password'];
+                      }
+                      if(val.newerPassword){
+                        this.password = val.newerPassword;
+                      }
+                      this.authService.userUpdated(this.username, this.oldname, this.password)
+                        .subscribe(
+                          () => {
+                            alert("user information updated");
+                            this.authService.logout();
+                            this.router.navigate(['home'])
+                          },
+                          () => {
+                            alert("update failed");
+                            this.errorColor="#ffccff"
+                          }
+                        );
                     }
-                    if(val.name){
-                      this.username = val.name;
+                    if(val.newerPassword === this.data['password']){
+                      alert("new password cant be old password");
                     }
-                    if(!val.newerPassword){
-                      this.password = this.data['password'];
+                    else if(val.olderPassword !== this.data['password']){
+                      alert("password is incorrect");
                     }
-                    if(val.newerPassword){
-                      this.password = val.newerPassword;
-                    }
-                    this.authService.userUpdated(this.username, this.oldname, this.password)
-                      .subscribe(
-                        () => {
-                          alert("user information updated");
-                          this.authService.logout();
-                          this.router.navigate(['home'])
-                        },
-                        () => {
-                          alert("update failed");
-                          this.errorColor="#ffccff"
-                        }
-                      );
                   }
-                  if(val.newerPassword === this.data['password']){
-                    alert("new password cant be old password");
-                  }
-                  else if(val.olderPassword !== this.data['password']){
-                    alert("password is incorrect");
-                  }
-                }
-              );
+                );
+            }
           },
           () => {
             alert("update failed");

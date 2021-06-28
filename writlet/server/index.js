@@ -128,7 +128,7 @@ app.get('/api/users/:user', function (req, res) {
       let query = { name: username }
       collection.findOne(query).then((user) => {
         if (!user) {
-          res.status(404).json({ message: "user not found" });
+          res.status(200).json({ message: "user not found" });
         }
         else if (user.name === username) {
           res.status(200).json({ message: "user exists" });
