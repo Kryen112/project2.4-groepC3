@@ -33,14 +33,15 @@ export class RegisterComponent implements OnInit {
         .subscribe(
           () => {
             alert("Registration successful. You can now login.");
+            this.router.navigate(['/login']);
           },
           () => {
-            alert("Registration failed.");
+            alert(val.name + " is already taken. Registration failed.");
             this.errorColor="#ffccff"
           }
         );
     } else if (!val.name) {
-      alert("Please enter an available username.");
+      alert("Please enter a username.");
     } else if (!val.password) {
       alert("Please enter a password.");
     }

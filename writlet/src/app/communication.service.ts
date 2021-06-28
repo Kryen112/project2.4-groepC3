@@ -32,9 +32,43 @@ export class CommunicationService {
 
   addPenPal(user: string, penpal: string) {
     console.log("addpenpal in commservice");
-    return this.http.post<Penpals>(API_URL + 'penpals', {user, penpal})
+    return this.http.post<Penpals>(API_URL + 'addpenpals', {user, penpal})
       .pipe(
         tap(
+          res => this.sendData(res),
+          err => this.handleError(err),
+        ),
+        shareReplay()
+      );
+  }
+
+  searchPenPal(searchString: string) {
+    console.log("searchPenPal in commservice");
+    return this.http.get<any[]>(API_URL + 'searchpenpals/' + searchString)
+      .pipe(
+        tap(
+          res => this.sendData(res),
+          err => this.handleError(err),
+        ),
+        shareReplay()
+      );
+  }
+
+  getPenPals(currentUser: string) {
+    return this.http.get<any[]>(API_URL + currentUser + '/getpenpals')
+      .pipe (
+        tap (
+          res => this.sendData(res),
+          err => this.handleError(err),
+        ),
+        shareReplay()
+      );
+  }
+
+  removePenPals(currentUser: string, penpalToRemove: string) {
+    return this.http.delete<any[]>(API_URL + currentUser + '/removepenpal' + penpalToRemove)
+      .pipe (
+        tap (
           res => this.sendData(res),
           err => this.handleError(err),
         ),
@@ -47,19 +81,14 @@ export class CommunicationService {
   }
 
   getMail(user: string) {
-    return this.http.get<any[]>(API_URL+'mymail/'+user)
+    return this.http.get<any[]>(API_URL + 'mymail/' + user)
       .pipe (
         tap (
-          res => this.myMail(res),
+          res => this.sendData(res),
           err => this.handleError(err),
         ),
         shareReplay()
       );
-  }
-
-  private myMail(authResult: any) {
-    console.log('authResult: ' + authResult);
-    return authResult;
   }
 
   letter = new BehaviorSubject(null);

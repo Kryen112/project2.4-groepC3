@@ -1,3 +1,4 @@
+import { ArrayType } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -12,6 +13,8 @@ export class PenpalsComponent implements OnInit {
   currentUser: string;
   userToAdd: string;
   form: FormGroup;
+  searchPenpals: Array<any>;
+  currentPenpals: Array<any>;
 
   constructor(private commService: CommunicationService,
               private authService: AuthService,
@@ -23,15 +26,45 @@ export class PenpalsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getPenPals();
   }
 
-  addPenPal(): void {
+  addPenPal(penpal: string): void {
     console.log("addpenpal in penpals component");
-    const val = this.form.value;
     let currentUser = this.authService.getUser();
-    let userToAdd = val.penpal;
-      this.commService.addPenPal(currentUser, userToAdd)
-      .subscribe( () => {});
+      this.commService.addPenPal(currentUser, penpal)
+      .subscribe( () => { console.log(currentUser + ' ' + penpal); });
+  }
+
+  searchPenPal(): void {
+    console.log("Searching pen pals");
+    this.searchPenpals = new Array;
+    const val = this.form.value;
+    let searchString = val.penpal;
+    this.commService.searchPenPal(searchString)
+    .subscribe( (searchPals) => {
+      this.searchPenpals = searchPals;
+      console.log(this.searchPenpals);
+    });
+  }
+
+  getPenPals(): void {
+    console.log("Getting pen pals");
+    let user = this.authService.getUser();
+    console.log('username: ' + user);
+    this.commService.getPenPals(user)
+      .subscribe(
+        (currentPals) => {
+          this.currentPenpals = currentPals[0].penpalList.sort();
+          console.log(this.currentPenpals);
+        });
+  }
+
+  removePenPal(penpal: string): void {
+    console.log("Removing pen pal");
+    let user = this.authService.getUser();
+    this.commService.removePenPals(user, penpal)
+      .subscribe(() => { });
   }
 
 }

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const cors = require('cors')
 const expressJwt = require('express-jwt');
 const mongo = require('mongodb');
+const { allowedNodeEnvironmentFlags } = require('process');
 const MongoClient = mongo.MongoClient;
 const url = 'mongodb://localhost:27017';
 
@@ -243,7 +244,7 @@ app.get('/api/penpals/:user', function(req, res) {
   }
 });
 
-app.post('/api/penpals', function (req, res) {
+app.post('/api/addpenpals', function (req, res) {
   if (req.body.user && req.body.penpal) {
     let currentUser = (req.body.user).toLowerCase();
     let userToAdd = (req.body.penpal).toLowerCase();
@@ -258,6 +259,69 @@ app.post('/api/penpals', function (req, res) {
     });
   }
 });
+
+app.get('/api/searchpenpals/:searchString', function (req, res) {
+  let searchString = req.params.searchString;
+  if (searchString) {
+    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+      if (err) throw err;
+      const db = client.db("writlet");
+      let collection = db.collection('users');
+      let query = {name: {'$regex' : searchString, '$options' : 'i'}};
+      collection.find(query).toArray(function (error, data) {
+        if (error) {
+          console.log(error);
+        } else {
+          let resultArray = new Array;
+          data.forEach(element => {
+            resultArray.push(element.name);
+          });
+          res.status(200).json(resultArray);
+        }
+        client.close();
+      });
+    });
+  }
+});
+
+app.get('/api/:currentUser/getpenpals', function (req, res) {
+  let currentUser = req.params.currentUser;
+  if (currentUser) {
+    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+      if (err) throw err;
+      const db = client.db("writlet");
+      let collection = db.collection('users');
+      let query = {name: currentUser};
+      collection.find(query).toArray(function (error, data) {
+        if (error) {
+          console.log(error);
+        } else {
+          res.status(200).json(data);
+        }
+        client.close();
+      });
+    });
+  }
+});
+
+app.delete('/api/:currentUser/removepenpal/:penpalToRemove'), function (req, res) {
+  let currentUser = req.params.currentUser;
+  let penpalToRemove = req.params.penpalToRemove;
+  MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+    if (err) throw err;
+    const db = client.db("writlet");
+    let collection = db.collection('users');
+    let query = {"name.penpalList": currentUser};
+    collection.deleteOne(query, (function (error) {
+      if (error) {
+        console.log(error);
+      } else {
+        res.status(200);
+      }
+      client.close();
+    }));
+  });
+}
 
 app.route('/api/secret')
 .get(checkIfAuthenticated, function (req, res) {
