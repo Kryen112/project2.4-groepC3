@@ -50,10 +50,13 @@ export class LetterComponent implements OnInit {
     } else if (text == null) {
       alert("There is no letter to send.")
     }
+    this.recipient = null;
+    this.letterTitle = null;
+    this.letterText = null;
   }
 
   setRecipientPlaceholder(): string {
-    if (this.recipient === null) {
+    if (this.recipient == null) {
       return "Dear Recipient,";
     }
     return "Dear " + this.recipient + ",";

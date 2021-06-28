@@ -66,7 +66,7 @@ export class CommunicationService {
   }
 
   removePenPals(currentUser: string, penpalToRemove: string) {
-    return this.http.delete<any[]>(API_URL + currentUser + '/removepenpal' + penpalToRemove)
+    return this.http.put<any[]>(API_URL + currentUser + '/removepenpal/' + penpalToRemove, penpalToRemove)
       .pipe (
         tap (
           res => this.sendData(res),

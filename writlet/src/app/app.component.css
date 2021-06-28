@@ -13,13 +13,15 @@ a {
     font-family: "Bookman Old Style", serif;
     font-weight: 900;
     text-decoration-line: none;
+    text-align: center;
 }
 
 .buttonswrapper {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 50%;
-    width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50%;
+  width: 60%;
+  text-align: center;
 }
 
 .unregisteredButton {
@@ -135,6 +137,10 @@ a {
   }
 
   #login {
+    text-align: center;
+  }
+
+  button {
     text-align: center;
   }
 }

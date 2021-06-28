@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CommunicationService } from 'src/app/communication.service';
+import {Router, RouterModule} from "@angular/router";
 
 @Component({
   selector: 'app-penpals',
@@ -18,7 +19,8 @@ export class PenpalsComponent implements OnInit {
 
   constructor(private commService: CommunicationService,
               private authService: AuthService,
-              private fb: FormBuilder) { 
+              private fb: FormBuilder,
+              private router: Router) {
 
     this.form = this.fb.group({
       penpal: ['',Validators.required]
@@ -32,8 +34,11 @@ export class PenpalsComponent implements OnInit {
   addPenPal(penpal: string): void {
     console.log("addpenpal in penpals component");
     let currentUser = this.authService.getUser();
-      this.commService.addPenPal(currentUser, penpal)
-      .subscribe( () => { console.log(currentUser + ' ' + penpal); });
+    this.commService.addPenPal(currentUser, penpal)
+    .subscribe( () => {
+      console.log(currentUser + ' ' + penpal);
+    });
+    this.getPenPals();
   }
 
   searchPenPal(): void {
@@ -65,6 +70,7 @@ export class PenpalsComponent implements OnInit {
     let user = this.authService.getUser();
     this.commService.removePenPals(user, penpal)
       .subscribe(() => { });
+    this.getPenPals();
   }
 
 }

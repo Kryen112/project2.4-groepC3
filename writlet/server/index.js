@@ -304,15 +304,14 @@ app.get('/api/:currentUser/getpenpals', function (req, res) {
   }
 });
 
-app.delete('/api/:currentUser/removepenpal/:penpalToRemove'), function (req, res) {
+app.put('/api/:currentUser/removepenpal/:penpalToRemove', function (req, res) {
   let currentUser = req.params.currentUser;
   let penpalToRemove = req.params.penpalToRemove;
   MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
     if (err) throw err;
     const db = client.db("writlet");
     let collection = db.collection('users');
-    let query = {"name.penpalList": currentUser};
-    collection.deleteOne(query, (function (error) {
+    collection.update({name: currentUser}, {"$pull": {"penpalList": penpalToRemove}}, (function (error) {
       if (error) {
         console.log(error);
       } else {
@@ -321,7 +320,7 @@ app.delete('/api/:currentUser/removepenpal/:penpalToRemove'), function (req, res
       client.close();
     }));
   });
-}
+});
 
 app.route('/api/secret')
 .get(checkIfAuthenticated, function (req, res) {

@@ -61,7 +61,12 @@ button {
 
   .logo {
     display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    max-width: 100%;
   }
+
   form {
     display: flex;
     margin-top: 5%;
@@ -91,6 +96,7 @@ button {
     margin-top: 2%;
     width: 20%;
     height: 5%;
+    min-width: 55px;
   }
 
   button:hover {
