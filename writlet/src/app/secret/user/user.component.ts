@@ -39,7 +39,7 @@ export class UserComponent implements OnInit {
           .subscribe(
             (info) => {
               this.data = info;
-              if(val.name === this.authService.getUser()){
+              if(val.name === this.oldname){
                 alert("new username cant be old username");
                 return;
               }
@@ -48,28 +48,37 @@ export class UserComponent implements OnInit {
                 return;
               }
               if(this.data['message'] === "user not found"){
-                this.authService.userInfo(this.authService.getUser())
+                this.authService.userInfo(this.oldname)
                   .subscribe(
                     (info) => {
                       this.data = info;
-                      this.oldname = this.data['name'];
                       this.authService.hashCheck(this.oldname, val.olderPassword)
                         .subscribe(
                           (hash) => {
                             if(hash['message'] === "hash was a match") {
                               this.username = val.name;
                               if (!val.newerPassword) {
-                                this.password = this.data['password'];
+                                this.password = "1";
                               }
                               if (val.newerPassword) {
                                 this.password = val.newerPassword;
+                                this.authService.hashCheck(this.oldname, val.newerPassword)
+                                  .subscribe(
+                                    (hash) => {
+                                      if (hash['message'] === "hash was a match") {
+                                        alert("new password cant be old password");
+                                        return;
+                                      }
+                                    }
+                                  );
                               }
                               this.authService.userUpdated(this.username, this.oldname, this.password)
                                 .subscribe(
                                   () => {
                                     alert("user information updated");
                                     this.authService.logout();
-                                    this.router.navigate(['home'])
+                                    this.router.navigate(['home']);
+                                    return;
                                   },
                                   () => {
                                     alert("update failed");
@@ -79,35 +88,7 @@ export class UserComponent implements OnInit {
                             }
                             else{
                               alert("password is incorrect");
-                            }
-                          }
-                        );
-                      this.authService.hashCheck(this.oldname, val.newerPassword)
-                        .subscribe(
-                          (hash) => {
-                            if (hash['message'] === "hash was a match") {
-                              alert("new password cant be old password");
-                            }
-                            else if (hash['message'] === "hash was no match"){
-                              this.username = val.name;
-                              if (!val.newerPassword) {
-                                this.password = this.data['password'];
-                              }
-                              if (val.newerPassword) {
-                                this.password = val.newerPassword;
-                              }
-                              this.authService.userUpdated(this.username, this.oldname, this.password)
-                                .subscribe(
-                                  () => {
-                                    alert("user information updated");
-                                    this.authService.logout();
-                                    this.router.navigate(['home'])
-                                  },
-                                  () => {
-                                    alert("update failed");
-                                    this.errorColor = "#ffccff"
-                                  }
-                                );
+                              return;
                             }
                           }
                         );
@@ -122,28 +103,37 @@ export class UserComponent implements OnInit {
           );
       }
       else if(!val.name){
-        this.authService.userInfo(this.authService.getUser())
+        this.authService.userInfo(this.oldname)
           .subscribe(
             (info) => {
               this.data = info;
-              this.oldname = this.data['name'];
               this.authService.hashCheck(this.oldname, val.olderPassword)
                 .subscribe(
                   (hash) => {
                     if(hash['message'] === "hash was a match") {
-                      this.username = val.name;
+                      this.username = this.oldname;
                       if (!val.newerPassword) {
-                        this.password = this.data['password'];
+                        this.password = "1";
                       }
                       if (val.newerPassword) {
                         this.password = val.newerPassword;
+                        this.authService.hashCheck(this.oldname, val.newerPassword)
+                          .subscribe(
+                            (hash) => {
+                              if (hash['message'] === "hash was a match") {
+                                alert("new password cant be old password");
+                                return;
+                              }
+                            }
+                          );
                       }
                       this.authService.userUpdated(this.username, this.oldname, this.password)
                         .subscribe(
                           () => {
                             alert("user information updated");
                             this.authService.logout();
-                            this.router.navigate(['home'])
+                            this.router.navigate(['home']);
+                            return;
                           },
                           () => {
                             alert("update failed");
@@ -153,35 +143,7 @@ export class UserComponent implements OnInit {
                     }
                     else{
                       alert("password is incorrect");
-                    }
-                  }
-                );
-              this.authService.hashCheck(this.oldname, val.newerPassword)
-                .subscribe(
-                  (hash) => {
-                    if (hash['message'] === "hash was a match") {
-                      alert("new password cant be old password");
-                    }
-                    else if (hash['message'] === "hash was no match"){
-                      this.username = this.oldname;
-                      if (!val.newerPassword) {
-                        this.password = this.data['password'];
-                      }
-                      if (val.newerPassword) {
-                        this.password = val.newerPassword;
-                      }
-                      this.authService.userUpdated(this.username, this.oldname, this.password)
-                        .subscribe(
-                          () => {
-                            alert("user information updated");
-                            this.authService.logout();
-                            this.router.navigate(['home'])
-                          },
-                          () => {
-                            alert("update failed");
-                            this.errorColor = "#ffccff"
-                          }
-                        );
+                      return;
                     }
                   }
                 );

@@ -178,20 +178,31 @@ app.post('/api/userupdate', async function (req, res) {
     try {
       let user = (req.body.oldname).toLowerCase();
       let newUser = (req.body.name).toLowerCase();
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      let hashedPassword = await bcrypt.hash(req.body.password, 10);
       await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
         if (err) throw err;
         const db = client.db("writlet");
-        db.collection('users').updateOne({name: user, penpalList: user}, {
-          $set: {
-            name: newUser,
-            password: hashedPassword,
-            "penpalList.$": newUser
-          }
-        }).then(() => {
-        }).finally(() => {
-          client.close();
-        });
+        if(req.body.password !== "1"){
+          db.collection('users').updateOne({name: user}, {
+            $set: {
+              name: newUser,
+              password: hashedPassword
+            }
+          }).then(() => {
+          }).finally(() => {
+            client.close();
+          });
+        }
+        else if(req.body.password === "1"){
+          db.collection('users').updateOne({name: user}, {
+            $set: {
+              name: newUser
+            }
+          }).then(() => {
+          }).finally(() => {
+            client.close();
+          });
+        }
         db.collection('users').updateMany({penpalList: user}, {$set: {"penpalList.$": newUser}}).then(() => {
           res.status(200).json({message: "information updated"});
         }).finally(() => {
