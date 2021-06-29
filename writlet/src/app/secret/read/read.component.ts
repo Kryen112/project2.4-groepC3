@@ -50,4 +50,10 @@ export class ReadComponent implements OnInit {
 
   }
 
+  deleteLetter() {
+    console.log(this.id);
+    this.commService.removeLetter(this.id);
+
+  }
+
 }
