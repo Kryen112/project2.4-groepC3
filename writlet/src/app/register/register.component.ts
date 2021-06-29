@@ -68,10 +68,19 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  showPassword(): void {
+    let x = <HTMLInputElement>document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+
   register(): void {
     const val = this.form.value;
-
-    if (val.name) {
+    
+    if (val.name <= 16) {
       if (val.password) {
         if (this.letter) {
           if (this.capital) {
@@ -104,7 +113,7 @@ export class RegisterComponent implements OnInit {
         alert("Please enter a password.");
       }
     } else {
-      alert("Please enter a username.");
+      alert("Please enter a username which is under 16 characters long.");
     }
   }
 }

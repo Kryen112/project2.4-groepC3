@@ -24,8 +24,11 @@
         Password
     </tr>
     <tr class="register">
-      <input type="password" placeholder="Password" required
-             [style.backgroundColor]="errorColor" formControlName="password" (keyup)="onKeyUp()" >
+      <input type="password" placeholder="Password" required id="password"
+             [style.backgroundColor]="errorColor" formControlName="password" (keyup)="onKeyUp()">
+    </tr>
+    <tr class="register">
+      <input type="checkbox" (click)="showPassword()">Show Password
     </tr>
     <tr class="register">
       <button type="submit" (click)="register()">Register</button>
