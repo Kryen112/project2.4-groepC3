@@ -35,7 +35,7 @@ export class AuthService {
                 shareReplay()
             );
     }
-    //getFriend vervangen door de functie die checkt of de user bestaat :)
+
     user(user: string) {
       return this.http.get<any[]>(API_URL+'users/'+user)
         .pipe(
@@ -64,6 +64,17 @@ export class AuthService {
 
     userUpdated(name:string, oldname:string, password:string) {
       return this.http.post<UserUpdate>(API_URL+'userupdate', {name, oldname, password})
+        .pipe (
+          tap (
+            res => this.userExists(res),
+            err => this.handleError(err),
+          ),
+          shareReplay()
+        );
+    }
+
+    hashCheck(name:string, password:string) {
+      return this.http.get<any[]>(API_URL+'users/'+name+'/hashcheck/'+password)
         .pipe (
           tap (
             res => this.userExists(res),

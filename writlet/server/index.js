@@ -3,6 +3,7 @@ const fs = require('fs');
 const jwt = require("jsonwebtoken");
 const cors = require('cors')
 const expressJwt = require('express-jwt');
+const bcrypt = require('bcrypt');
 const mongo = require('mongodb');
 const { allowedNodeEnvironmentFlags } = require('process');
 const MongoClient = mongo.MongoClient;
@@ -55,84 +56,90 @@ app.get('/api', async (req, res) => {
   res.sendStatus(200);
 });
 
-app.post('/api/login', function (req, res) {
+app.post('/api/login', async function (req, res) {
   if (req.body.name && req.body.password) {
-    let name = (req.body.name).toLowerCase();
-    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
-      if (err) throw err;
-      const db = client.db("writlet");
-      let collection = db.collection('users');
-      let query = { name: name }
-      collection.findOne(query).then((user) => {
-        if (!user) {
-          res.sendStatus(401);
-        }
-        else if (user.password === req.body.password) {
-          let payload = { name, id: user.id };
-          let token = jwt.sign(payload, privateKey, signOptions);
-          res.json({
-            message: 'ok',
-            token: token,
-            expiresIn: jwt.decode(token).exp
-          });
-        } else {
-          res.sendStatus(401);
-        }
-      }).finally(() => {
-        client.close();
-      });
-    });
-  }
-});
-
-app.post('/api/register', function (req, res) {
-  if (req.body.name && req.body.password) {
-    let name = (req.body.name).toLowerCase();
-    let password = req.body.password;
-    let penpalList = [name];
-    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
-      if (err) throw err;
-      const db = client.db("writlet");
-      let collection = db.collection('users');
-      let query = { name: name }
-      collection.findOne(query).then((user) => {
-        if (!user) {
-          MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
-            if (err) throw err;
-            const db = client.db("writlet");
-            let user = { name: name, password: password, penpalList: penpalList };
-            db.collection('users').insertOne(user).then(() => {
-              res.status(200).json({ message: "user created" });
-            }).finally(() => {
-              client.close();
+    try {
+      let name = (req.body.name).toLowerCase();
+      await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+        if (err) throw err;
+        const db = client.db("writlet");
+        let collection = db.collection('users');
+        let query = {name: name}
+        collection.findOne(query).then(async (user) => {
+          if (!user) {
+            res.sendStatus(401);
+          } else if (await bcrypt.compare(req.body.password, user.password)) {
+            let payload = {name, id: user.id};
+            let token = jwt.sign(payload, privateKey, signOptions);
+            res.json({
+              message: 'ok',
+              token: token,
+              expiresIn: jwt.decode(token).exp
             });
-          });
-        }
-        else {
-          res.status(403).json({ message: "username taken" });
-        }
-      }).finally(() => {
-        client.close();
+          } else {
+            res.sendStatus(401);
+          }
+        }).finally(() => {
+          client.close();
+        });
       });
-    });
+    }
+    catch{
+      res.sendStatus(500);
+    }
   }
 });
 
-//friendlist vervangen naar een get die kijkt of de user bestaat :)
-app.get('/api/users/:user', function (req, res) {
+app.post('/api/register', async function (req, res) {
+  if (req.body.name && req.body.password) {
+    let name = (req.body.name).toLowerCase();
+    let penpalList = [name];
+    try{
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+        if (err) throw err;
+        const db = client.db("writlet");
+        let collection = db.collection('users');
+        let query = {name: name}
+        collection.findOne(query).then((user) => {
+          if (!user) {
+            MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+              if (err) throw err;
+              const db = client.db("writlet");
+              let user = {name: name, password: hashedPassword, penpalList: penpalList};
+              db.collection('users').insertOne(user).then(() => {
+                res.status(200).json({message: "user created"});
+              }).finally(() => {
+                client.close();
+              });
+            });
+          } else {
+            res.status(403).json({message: "username taken"});
+          }
+        }).finally(() => {
+          client.close();
+        });
+      });
+    }
+    catch{
+      res.sendStatus(500);
+    }
+  }
+});
+
+app.get('/api/users/:user', async function (req, res) {
   let username = req.params.user;
   if(username) {
-    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+    await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
       let collection = db.collection('users');
-      let query = { name: username }
+      let query = {name: username}
       collection.findOne(query).then((user) => {
         if (!user) {
-          res.status(200).json({ message: "user not found" });
-        }
-        else if (user.name === username) {
-          res.status(200).json({ message: "user exists" });
+          res.status(200).json({message: "user not found"});
+        } else if (user.name === username) {
+          res.status(200).json({message: "user exists"});
         } else {
           res.sendStatus(401);
         }
@@ -143,21 +150,19 @@ app.get('/api/users/:user', function (req, res) {
   }
 });
 
-//geeft wachtwoord en username terug :)
-app.get('/api/userinfo/:user', function (req, res) {
+app.get('/api/userinfo/:user', async function (req, res) {
   let username = req.params.user;
   if(username) {
-    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+    await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
       let collection = db.collection('users');
-      let query = { name: username }
+      let query = {name: username}
       collection.findOne(query).then((user) => {
         if (!user) {
-          res.status(404).json({ message: "user not found" });
-        }
-        else if (user.name === username) {
-          res.status(200).json({ name: user.name, password: user.password});
+          res.status(404).json({message: "user not found"});
+        } else if (user.name === username) {
+          res.status(200).json({name: user.name, password: user.password});
         } else {
           res.sendStatus(401);
         }
@@ -168,17 +173,60 @@ app.get('/api/userinfo/:user', function (req, res) {
   }
 });
 
-//wachtwoord en username worden geupdate :)
-app.post('/api/userupdate', function (req, res) {
+app.post('/api/userupdate', async function (req, res) {
   if (req.body.name && req.body.oldname && req.body.password) {
-    let user = (req.body.oldname).toLowerCase();
-    let newUser = (req.body.name).toLowerCase();
-    let password = req.body.password;
-    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+    try {
+      let user = (req.body.oldname).toLowerCase();
+      let newUser = (req.body.name).toLowerCase();
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+        if (err) throw err;
+        const db = client.db("writlet");
+        db.collection('users').updateOne({name: user, penpalList: user}, {
+          $set: {
+            name: newUser,
+            password: hashedPassword,
+            "penpalList.$": newUser
+          }
+        }).then(() => {
+        }).finally(() => {
+          client.close();
+        });
+        db.collection('users').updateMany({penpalList: user}, {$set: {"penpalList.$": newUser}}).then(() => {
+          res.status(200).json({message: "information updated"});
+        }).finally(() => {
+          client.close();
+        });
+      });
+    }
+    catch{
+      res.sendStatus(500);
+    }
+  }
+});
+
+app.get('/api/users/:user/hashcheck/:password', async function (req, res) {
+  let username = req.params.user;
+  let password = req.params.password;
+  if(username && password) {
+    await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
-      db.collection('users').updateOne({name: user, penpalList: user}, {$set: { name: newUser, password: password, "penpalList.$": newUser }}).then(() => {
-        res.status(200).json({ message: "information updated" });
+      let collection = db.collection('users');
+      let query = {name: username}
+      collection.findOne(query).then(async (user) => {
+        if (!user) {
+          res.status(404).json({message: "could not check hash"});
+        } else if (user.name === username) {
+          if(await bcrypt.compare(password, user.password)){
+            res.status(200).json({message: "hash was a match"});
+          }
+          else{
+            res.status(200).json({message: "hash was no match"});
+          }
+        } else {
+          res.sendStatus(401);
+        }
       }).finally(() => {
         client.close();
       });
@@ -186,14 +234,14 @@ app.post('/api/userupdate', function (req, res) {
   }
 });
 
-app.post('/api/mail', function (req, res) {
+app.post('/api/mail', async function (req, res) {
   if (req.body.letter) {
-    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+    await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
-      let letter = { letter: req.body.letter };
+      let letter = {letter: req.body.letter};
       db.collection('mail').insertOne(letter).then(() => {
-        res.status(200).json({ message: "mail send" });
+        res.status(200).json({message: "mail send"});
       }).finally(() => {
         client.close();
       });
@@ -201,10 +249,10 @@ app.post('/api/mail', function (req, res) {
   }
 });
 
-app.get('/api/mymail/:user', function (req, res) {
+app.get('/api/mymail/:user', async function (req, res) {
   let username = req.params.user;
   if (username) {
-    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+    await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
       let collection = db.collection('mail');
@@ -221,11 +269,10 @@ app.get('/api/mymail/:user', function (req, res) {
   }
 });
 
-//deze werkt nu en stuurt de penpals van de persoon terug :)
-app.get('/api/penpals/:user', function(req, res) {
+app.get('/api/penpals/:user', async function (req, res) {
   let username = req.params.user;
   if (username) {
-    MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+    await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
       let collection = db.collection('users');
@@ -233,8 +280,7 @@ app.get('/api/penpals/:user', function(req, res) {
       collection.findOne(query).then((user) => {
         if (!user) {
           res.sendStatus(401);
-        }
-        else {
+        } else {
           res.status(200).json(user.penpalList);
         }
       }).finally(() => {
@@ -244,15 +290,15 @@ app.get('/api/penpals/:user', function(req, res) {
   }
 });
 
-app.post('/api/addpenpals', function (req, res) {
+app.post('/api/addpenpals', async function (req, res) {
   if (req.body.user && req.body.penpal) {
     let currentUser = (req.body.user).toLowerCase();
     let userToAdd = (req.body.penpal).toLowerCase();
-    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+    await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
-      db.collection('users').updateOne({name: currentUser}, {$addToSet: { penpalList: userToAdd }}).then(() => {
-        res.status(200).json({ message: "penpal added" });
+      db.collection('users').updateOne({name: currentUser}, {$addToSet: {penpalList: userToAdd}}).then(() => {
+        res.status(200).json({message: "penpal added"});
       }).finally(() => {
         client.close();
       });
@@ -260,19 +306,19 @@ app.post('/api/addpenpals', function (req, res) {
   }
 });
 
-app.get('/api/searchpenpals/:searchString', function (req, res) {
+app.get('/api/searchpenpals/:searchString', async function (req, res) {
   let searchString = req.params.searchString;
   if (searchString) {
-    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+    await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
       let collection = db.collection('users');
-      let query = {name: {'$regex' : searchString, '$options' : 'i'}};
+      let query = {name: {'$regex': searchString, '$options': 'i'}};
       collection.find(query).toArray(function (error, data) {
         if (error) {
           console.log(error);
         } else {
-          let resultArray = new Array;
+          let resultArray = [];
           data.forEach(element => {
             resultArray.push(element.name);
           });
@@ -284,10 +330,10 @@ app.get('/api/searchpenpals/:searchString', function (req, res) {
   }
 });
 
-app.get('/api/:currentUser/getpenpals', function (req, res) {
+app.get('/api/:currentUser/getpenpals', async function (req, res) {
   let currentUser = req.params.currentUser;
   if (currentUser) {
-    MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+    await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
       const db = client.db("writlet");
       let collection = db.collection('users');
@@ -304,14 +350,14 @@ app.get('/api/:currentUser/getpenpals', function (req, res) {
   }
 });
 
-app.put('/api/:currentUser/removepenpal/:penpalToRemove', function (req, res) {
+app.put('/api/:currentUser/removepenpal/:penpalToRemove', async function (req, res) {
   let currentUser = req.params.currentUser;
   let penpalToRemove = req.params.penpalToRemove;
-  MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
+  await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
     if (err) throw err;
     const db = client.db("writlet");
     let collection = db.collection('users');
-    collection.update({name: currentUser}, {"$pull": {"penpalList": penpalToRemove}}, (function (error) {
+    collection.updateOne({name: currentUser}, {"$pull": {"penpalList": penpalToRemove}}, (function (error) {
       if (error) {
         console.log(error);
       } else {

@@ -29,44 +29,113 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  //kijkt of 1 veld is ingevuld en oud wachtwoord
-  //kijkt of gebruikersnaam hetzelfde is of al ingebruik is
-  //kijkt of wachtwoord hetzelfde is
-  //als alles goed is wordt het nieuwe wachtwoord/username gepushed naar de database
-  //de user wordt uitgelogd omdat de JWT token anders niet meer klopt
+
   userUpdated(): void {
     const val = this.form.value;
 
     if (val.name && val.olderPassword || val.name && val.newerPassword && val.olderPassword || val.newerPassword && val.olderPassword) {
-      this.authService.user(val.name)
-        .subscribe(
-          (info) => {
-            this.data = info;
-            if(val.name === this.authService.getUser()){
-              alert("new username cant be old username");
-              return;
+      if(val.name){
+        this.authService.user(val.name)
+          .subscribe(
+            (info) => {
+              this.data = info;
+              if(val.name === this.authService.getUser()){
+                alert("new username cant be old username");
+                return;
+              }
+              if(this.data['message'] === "user exists"){
+                alert("username already taken");
+                return;
+              }
+              if(this.data['message'] === "user not found"){
+                this.authService.userInfo(this.authService.getUser())
+                  .subscribe(
+                    (info) => {
+                      this.data = info;
+                      this.oldname = this.data['name'];
+                      this.authService.hashCheck(this.oldname, val.olderPassword)
+                        .subscribe(
+                          (hash) => {
+                            if(hash['message'] === "hash was a match") {
+                              this.username = val.name;
+                              if (!val.newerPassword) {
+                                this.password = this.data['password'];
+                              }
+                              if (val.newerPassword) {
+                                this.password = val.newerPassword;
+                              }
+                              this.authService.userUpdated(this.username, this.oldname, this.password)
+                                .subscribe(
+                                  () => {
+                                    alert("user information updated");
+                                    this.authService.logout();
+                                    this.router.navigate(['home'])
+                                  },
+                                  () => {
+                                    alert("update failed");
+                                    this.errorColor = "#ffccff"
+                                  }
+                                );
+                            }
+                            else{
+                              alert("password is incorrect");
+                            }
+                          }
+                        );
+                      this.authService.hashCheck(this.oldname, val.newerPassword)
+                        .subscribe(
+                          (hash) => {
+                            if (hash['message'] === "hash was a match") {
+                              alert("new password cant be old password");
+                            }
+                            else if (hash['message'] === "hash was no match"){
+                              this.username = val.name;
+                              if (!val.newerPassword) {
+                                this.password = this.data['password'];
+                              }
+                              if (val.newerPassword) {
+                                this.password = val.newerPassword;
+                              }
+                              this.authService.userUpdated(this.username, this.oldname, this.password)
+                                .subscribe(
+                                  () => {
+                                    alert("user information updated");
+                                    this.authService.logout();
+                                    this.router.navigate(['home'])
+                                  },
+                                  () => {
+                                    alert("update failed");
+                                    this.errorColor = "#ffccff"
+                                  }
+                                );
+                            }
+                          }
+                        );
+                      }
+                  );
+              }
+            },
+            () => {
+              alert("update failed");
+              this.errorColor="#ffccff"
             }
-            if(this.data['message'] === "user exists"){
-              alert("username already taken");
-              return;
-            }
-            if(this.data['message'] === "user not found"){
-              this.authService.userInfo(this.authService.getUser())
+          );
+      }
+      else if(!val.name){
+        this.authService.userInfo(this.authService.getUser())
+          .subscribe(
+            (info) => {
+              this.data = info;
+              this.oldname = this.data['name'];
+              this.authService.hashCheck(this.oldname, val.olderPassword)
                 .subscribe(
-                  (info) => {
-                    this.data = info;
-                    this.oldname = this.data['name'];
-                    if(val.olderPassword === this.data['password']){
-                      if(!val.name){
-                        this.username = this.data['name'];
-                      }
-                      if(val.name){
-                        this.username = val.name;
-                      }
-                      if(!val.newerPassword){
+                  (hash) => {
+                    if(hash['message'] === "hash was a match") {
+                      this.username = val.name;
+                      if (!val.newerPassword) {
                         this.password = this.data['password'];
                       }
-                      if(val.newerPassword){
+                      if (val.newerPassword) {
                         this.password = val.newerPassword;
                       }
                       this.authService.userUpdated(this.username, this.oldname, this.password)
@@ -78,25 +147,47 @@ export class UserComponent implements OnInit {
                           },
                           () => {
                             alert("update failed");
-                            this.errorColor="#ffccff"
+                            this.errorColor = "#ffccff"
                           }
                         );
                     }
-                    if(val.newerPassword === this.data['password']){
-                      alert("new password cant be old password");
-                    }
-                    else if(val.olderPassword !== this.data['password']){
+                    else{
                       alert("password is incorrect");
                     }
                   }
                 );
+              this.authService.hashCheck(this.oldname, val.newerPassword)
+                .subscribe(
+                  (hash) => {
+                    if (hash['message'] === "hash was a match") {
+                      alert("new password cant be old password");
+                    }
+                    else if (hash['message'] === "hash was no match"){
+                      this.username = this.oldname;
+                      if (!val.newerPassword) {
+                        this.password = this.data['password'];
+                      }
+                      if (val.newerPassword) {
+                        this.password = val.newerPassword;
+                      }
+                      this.authService.userUpdated(this.username, this.oldname, this.password)
+                        .subscribe(
+                          () => {
+                            alert("user information updated");
+                            this.authService.logout();
+                            this.router.navigate(['home'])
+                          },
+                          () => {
+                            alert("update failed");
+                            this.errorColor = "#ffccff"
+                          }
+                        );
+                    }
+                  }
+                );
             }
-          },
-          () => {
-            alert("update failed");
-            this.errorColor="#ffccff"
-          }
-        );
+          );
+      }
     } else if (!val.name && !val.newerPassword) {
       alert("Please enter either a new username or new password.");
     } else if (!val.olderPassword) {
