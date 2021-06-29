@@ -81,40 +81,36 @@ export class RegisterComponent implements OnInit {
     const val = this.form.value;
 
     if (val.name) {
-      if (val.name.length <= 16) {
-        if (val.password) {
-          if (this.letter) {
-            if (this.capital) {
-              if (this.number) {
-                if (this.length) {
-                  this.authService.register(val.name, val.password)
-                  .subscribe(
-                    () => {
-                      alert("Registration successful. You can now login.");
-                      this.router.navigate(['/login']);
-                    },
-                    () => {
-                      alert(val.name + " is already taken. Registration failed.");
-                      this.errorColor="#ffccff";
-                    }
-                  );
-                } else {
-                  alert("Password must be longer than 6 characters and smaller than 16 characters.");
-                }
+      if (val.password) {
+        if (this.letter) {
+          if (this.capital) {
+            if (this.number) {
+              if (this.length) {
+                this.authService.register(val.name, val.password)
+                .subscribe(
+                  () => {
+                    alert("Registration successful. You can now login.");
+                    this.router.navigate(['/login']);
+                  },
+                  () => {
+                    alert(val.name + " is already taken. Registration failed.");
+                    this.errorColor="#ffccff";
+                  }
+                );
               } else {
-                alert("Password must contain a number (0-9).");
+                alert("Password must be longer than 6 characters and smaller than 16 characters.");
               }
             } else {
-              alert("Password must contain an uppercase, alphabetic letter.");
+              alert("Password must contain a number (0-9).");
             }
           } else {
-            alert("Password must contain a lowercase, alphabetic letter.");
+            alert("Password must contain an uppercase, alphabetic letter.");
           }
         } else {
-          alert("Please enter a password.");
+          alert("Password must contain a lowercase, alphabetic letter.");
         }
       } else {
-        alert("Please enter a username which is 16 characters or less.");
+        alert("Please enter a password.");
       }
     } else {
       alert("Please enter a username.");

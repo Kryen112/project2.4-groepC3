@@ -91,7 +91,7 @@ export class UserComponent implements OnInit {
             (info) => {
               this.data = info;
               if(val.name === this.oldname){
-                alert("new username cant be old username");
+                alert("new username cannot be old username");
                 return;
               }
               if(this.data['message'] === "user exists"){
