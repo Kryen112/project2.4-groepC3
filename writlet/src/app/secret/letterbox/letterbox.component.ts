@@ -33,4 +33,11 @@ export class LetterboxComponent implements OnInit {
     let date = new Date(dateString)
     return date.toDateString()
   }
+
+  getDate(dateString: string) {
+    let deliverDate = new Date(dateString);
+    let currentDate = new Date();
+    return currentDate > deliverDate;
+
+  }
 }

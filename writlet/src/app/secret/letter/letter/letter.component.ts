@@ -12,13 +12,16 @@ export class LetterComponent implements OnInit {
   recipient: string;
   letterTitle: string;
   letterText: string;
+  currentPenpals: Array<any>;
   send: Date;
   arrival: Date;
 
   constructor(private commService: CommunicationService,
               private authService: AuthService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    this.getPenPals();
+  }
 
   sendLetter(recipient: string, title: string, text: string): void {
     if(recipient && title && text) {
@@ -62,6 +65,16 @@ export class LetterComponent implements OnInit {
 
   getCurrentDate(): string {
     return new Date().toDateString()
+  }
+
+  getPenPals(): void {
+    let user = this.authService.getUser();
+    this.commService.getPenPals(user)
+      .subscribe(
+        (currentPals) => {
+          this.currentPenpals = currentPals[0].penpalList.sort();
+
+        });
   }
 
 }
