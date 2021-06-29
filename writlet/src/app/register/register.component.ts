@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
       }
 
       // Validate length
-      if(pwd.value.length >= 8) {
+      if(pwd.value.length >= 8 && pwd.value.length < 16) {
         this.length = true;
       } else {
         this.length = false;
@@ -89,10 +89,10 @@ export class RegisterComponent implements OnInit {
                   }
                 );
               } else {
-                alert("Password muse be longer than 6 characters");
+                alert("Password must be longer than 6 characters and smaller than 16 characters.");
               }
             } else {
-              alert("Password must contain a number (0-9)");
+              alert("Password must contain a number (0-9).");
             }
           } else {
             alert("Password must contain an uppercase, alphabetic letter.");
