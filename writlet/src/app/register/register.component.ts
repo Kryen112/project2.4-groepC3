@@ -60,7 +60,7 @@ export class RegisterComponent implements OnInit {
       }
 
       // Validate length
-      if(pwd.value.length >= 6) {
+      if(pwd.value.length >= 8) {
         this.length = true;
       } else {
         this.length = false;
