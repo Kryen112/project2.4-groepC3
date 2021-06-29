@@ -23,9 +23,6 @@ export class LetterComponent implements OnInit {
     this.getPenPals();
   }
 
-
-  //de functie die checkt of de gebruiker bestaat eruit gehaald
-  //deze moet straks de dropdown van de penpallist worden
   sendLetter(recipient: string, title: string, text: string): void {
     if(recipient && title && text) {
       this.username = this.authService.getUser();
@@ -40,7 +37,8 @@ export class LetterComponent implements OnInit {
           recipient: this.recipient,
           title: this.letterTitle,
           text: this.letterText,
-          time: this.arrival
+          send: this.send,
+          arrival: this.arrival
         })
         .subscribe(
         () => {
