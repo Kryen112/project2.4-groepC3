@@ -25,6 +25,15 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  showPassword(): void {
+    let x = <HTMLInputElement>document.getElementById("password");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+
   login(): void {
     const val = this.form.value;
 

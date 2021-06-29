@@ -18,14 +18,14 @@
     </tr>
     <tr class="register">
       <input type="text" placeholder="Username" required autofocus
-             [style.backgroundColor]="errorColor" formControlName="name">
+             [style.backgroundColor]="errorColor" maxlength="16" formControlName="name">
     </tr>
     <tr class="register">
         Password
     </tr>
     <tr class="register">
       <input type="password" placeholder="Password" required id="password"
-             [style.backgroundColor]="errorColor" formControlName="password" (keyup)="onKeyUp()">
+             [style.backgroundColor]="errorColor" maxlength="16" formControlName="password" (keyup)="onKeyUp()">
     </tr>
     <tr class="register">
       <input type="checkbox" (click)="showPassword()">Show Password

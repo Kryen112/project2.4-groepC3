@@ -18,18 +18,21 @@
     </tr>
     <tr class="login">
       <input type="text" placeholder="Username" required autofocus
-             [style.backgroundColor]="errorColor" formControlName="name">
+             [style.backgroundColor]="errorColor" maxlength="16" formControlName="name">
     </tr>
     <tr class="login">
       Password
     </tr>
     <tr class="login">
-      <input type="password" placeholder="Password" required
-             [style.backgroundColor]="errorColor" formControlName="password">
+      <input type="password" id="password" placeholder="Password" required
+             [style.backgroundColor]="errorColor" maxlength="16" formControlName="password">
+    </tr>
+    <tr class="login">
+      <input type="checkbox" (click)="showPassword()">Show Password
     </tr>
     <tr class="login">
       <button type="submit" (click)="login()">Login</button>
-    </tr> 
+    </tr>
   </table>
 </form>
 
