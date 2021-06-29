@@ -85,7 +85,7 @@ export class RegisterComponent implements OnInit {
                   },
                   () => {
                     alert(val.name + " is already taken. Registration failed.");
-                    this.errorColor="#ffccff"
+                    this.errorColor="#ffccff";
                   }
                 );
               } else {
