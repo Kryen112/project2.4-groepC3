@@ -15,6 +15,7 @@ export class RegisterComponent implements OnInit {
   capital: boolean;
   number: boolean;
   length: boolean;
+  show: boolean;
 
   constructor(private fb:FormBuilder,
               private authService: AuthService,
@@ -32,7 +33,7 @@ export class RegisterComponent implements OnInit {
   onKeyUp(): void {
     let pwd = this.form.get('password');
 
-    document.getElementById("message").style.display = "block";
+    this.show = true;
 
     if (pwd) {
       // Validate lowercase letters
@@ -75,6 +76,10 @@ export class RegisterComponent implements OnInit {
     } else {
       x.type = "password";
     }
+  }
+
+  disablePopup(): void {
+    this.show = false;
   }
 
   register(): void {

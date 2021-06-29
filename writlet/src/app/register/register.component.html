@@ -24,7 +24,7 @@
         Password
     </tr>
     <tr class="register">
-      <input type="password" placeholder="Password" required id="password"
+      <input type="password" placeholder="Password" required id="password" (blur)="disablePopup()"
              [style.backgroundColor]="errorColor" maxlength="16" formControlName="password" (keyup)="onKeyUp()">
     </tr>
     <tr class="register">
@@ -33,16 +33,16 @@
     <tr class="register">
       <button type="submit" (click)="register()">Register</button>
     </tr>
-    <div id="message">
+    <div class="message" [ngClass]="{'show' : this.show}">
       <h3>Password must contain the following:</h3>
-      <p id="letter" class="invalid" *ngIf="!letter">A <strong>lowercase</strong> letter</p>
-      <p id="letter" class="valid" *ngIf="letter">A <strong>lowercase</strong> letter</p>
-      <p id="capital" class="invalid" *ngIf="!capital">A <strong>capital (uppercase)</strong> letter</p>
-      <p id="capital" class="valid" *ngIf="capital">A <strong>capital (uppercase)</strong> letter</p>
-      <p id="number" class="invalid" *ngIf="!number">A <strong>number</strong></p>
-      <p id="number" class="valid" *ngIf="number">A <strong>number</strong></p>
-      <p id="length" class="invalid" *ngIf="!length">Minimum <strong>8 characters</strong></p>
-      <p id="length" class="valid" *ngIf="length">Minimum <strong>8 characters</strong></p>
+      <div id="letter" class="invalid" *ngIf="!letter">A <strong>lowercase</strong> letter</div>
+      <div id="letter" class="valid" *ngIf="letter">A <strong>lowercase</strong> letter</div>
+      <div id="capital" class="invalid" *ngIf="!capital">A <strong>capital (uppercase)</strong> letter</div>
+      <div id="capital" class="valid" *ngIf="capital">A <strong>capital (uppercase)</strong> letter</div>
+      <div id="number" class="invalid" *ngIf="!number">A <strong>number</strong></div>
+      <div id="number" class="valid" *ngIf="number">A <strong>number</strong></div>
+      <div id="length" class="invalid" *ngIf="!length">Minimum <strong>8 characters</strong>. Maximum <strong>16 characters</strong></div>
+      <div id="length" class="valid" *ngIf="length">Minimum <strong>8 characters</strong>. Maximum <strong>16 characters</strong></div>
     </div>
   </table>
 </form>

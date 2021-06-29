@@ -47,6 +47,7 @@ export class LetterboxComponent implements OnInit {
   setReadableLetters(data: any[]) {
     for (let letter of data) {
       if (this.getDate(letter['letter']['time'])) {
+
         this.readableLetters.push(letter);
       }
     }

@@ -379,22 +379,21 @@ app.put('/api/:currentUser/removepenpal/:penpalToRemove', async function (req, r
   });
 });
 
-app.delete('api/deleteletter/:id', async function (req, res) {
+app.delete('/api/deleteletter/:id', async function (req, res) {
   console.log('eerste check api delete');
   let currentLetter = req.params.id;
   await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
     if (err) throw err;
     const db = client.db("writlet");
     let collection = db.collection('mail');
-    collection.deleteOne({_id: (currentLetter)}),  (function (error) {
+    collection.deleteOne({_id: mongo.ObjectId(currentLetter)},  (function (error) {
       if (error) {
         console.log(error);
       } else {
-        console.log('api delete path check')
         res.status(200);
       }
       client.close();
-    });
+    }));
   })
 });
 

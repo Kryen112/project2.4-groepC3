@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {CommunicationService} from "../../communication.service";
 import {AuthService} from "../../auth/auth.service";
 import {JsonObject} from "@angular/compiler-cli/ngcc/src/packages/entry_point";
@@ -17,6 +17,7 @@ export class ReadComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     public commService: CommunicationService,
     private authService: AuthService
   ) { }
@@ -52,7 +53,9 @@ export class ReadComponent implements OnInit {
 
   deleteLetter() {
     console.log(this.id);
-    this.commService.removeLetter(this.id);
+    this.commService.removeLetter(this.id)
+      .subscribe(() => {});
+    this.router.navigate(['secret/letterbox'])
 
   }
 
