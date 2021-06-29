@@ -111,6 +111,7 @@ button {
   position: relative;
   padding: 20px;
   margin-top: 10px;
+  text-align: center;
 }
 
 #message p {
