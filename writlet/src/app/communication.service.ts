@@ -76,6 +76,19 @@ export class CommunicationService {
       );
   }
 
+  removeLetter(letter: string) {
+    console.log("Removing Letter");
+    console.log(API_URL + 'deleteletter/' + letter)
+    return this.http.delete(API_URL + 'deleteletter/' + letter)
+      .pipe (
+        tap (
+          res => this.sendData(res),
+          err => this.handleError(err),
+        ),
+        shareReplay()
+      );
+  }
+
   private handleError(error: any) {
     console.log(error);
   }
