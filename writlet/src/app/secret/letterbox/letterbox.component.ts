@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CommunicationService} from "../../communication.service";
 import { AuthService } from 'src/app/auth/auth.service';
 
@@ -9,24 +9,28 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class LetterboxComponent implements OnInit {
   username:string;
-  data:Array<any>;
+  data: Array<any>;
+  readableLetters: Array<any>;
+
 
   constructor(public commService:CommunicationService,
               private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.data = new Array<any>();
+    this.readableLetters = new Array<any>()
     this.getMail();
   }
 
   getMail(){
     let user = this.authService.getUser();
-    console.log('username: ' + user);
     this.commService.getMail(user)
       .subscribe(
         (brieven) => {
           this.data = brieven;
-          console.log(this.data);
+          this.setReadableLetters(brieven);
         });
+
   }
 
   parseDate(dateString: string) {
@@ -38,6 +42,13 @@ export class LetterboxComponent implements OnInit {
     let deliverDate = new Date(dateString);
     let currentDate = new Date();
     return currentDate > deliverDate;
+  }
 
+  setReadableLetters(data: any[]) {
+    for (let letter of data) {
+      if (this.getDate(letter['letter']['time'])) {
+        this.readableLetters.push(letter);
+      }
+    }
   }
 }
