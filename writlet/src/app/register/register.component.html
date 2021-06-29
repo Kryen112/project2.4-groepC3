@@ -24,11 +24,25 @@
         Password
     </tr>
     <tr class="register">
-      <input type="password" placeholder="Password" required
-             [style.backgroundColor]="errorColor" formControlName="password">
+      <input type="password" placeholder="Password" required id="password"
+             [style.backgroundColor]="errorColor" formControlName="password" (keyup)="onKeyUp()">
+    </tr>
+    <tr class="register">
+      <input type="checkbox" (click)="showPassword()">Show Password
     </tr>
     <tr class="register">
       <button type="submit" (click)="register()">Register</button>
     </tr>
+    <div id="message">
+      <h3>Password must contain the following:</h3>
+      <p id="letter" class="invalid" *ngIf="!letter">A <strong>lowercase</strong> letter</p>
+      <p id="letter" class="valid" *ngIf="letter">A <strong>lowercase</strong> letter</p>
+      <p id="capital" class="invalid" *ngIf="!capital">A <strong>capital (uppercase)</strong> letter</p>
+      <p id="capital" class="valid" *ngIf="capital">A <strong>capital (uppercase)</strong> letter</p>
+      <p id="number" class="invalid" *ngIf="!number">A <strong>number</strong></p>
+      <p id="number" class="valid" *ngIf="number">A <strong>number</strong></p>
+      <p id="length" class="invalid" *ngIf="!length">Minimum <strong>8 characters</strong></p>
+      <p id="length" class="valid" *ngIf="length">Minimum <strong>8 characters</strong></p>
+    </div>
   </table>
 </form>

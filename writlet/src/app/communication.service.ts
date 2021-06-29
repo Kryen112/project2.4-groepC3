@@ -15,7 +15,7 @@ export class CommunicationService {
   constructor(private http: HttpClient) {
   }
 
-  mail(letter: { recipient: string; text: string; time: any; title: string; username: string }) {
+  mail(letter: { recipient: string; text: string; send: Date; arrival: Date; title: string; username: string }) {
     return this.http.post<Letter>(API_URL + 'mail', {letter})
       .pipe(
         tap(

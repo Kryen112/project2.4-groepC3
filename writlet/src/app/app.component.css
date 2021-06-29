@@ -35,6 +35,7 @@ a {
     margin: 2% auto auto;
     width: 100%;
     height: 5%;
+    min-width: 105px;
 }
 
 #login {
@@ -91,7 +92,7 @@ a {
   resize: both;
   width: 100%;
   margin-top: 2vh;
-
+  max-width: 100%;
 }
 
 
@@ -127,6 +128,8 @@ a {
 
   .unregisteredButton {
     font-size: 40px;
+    min-width: 170px;
+    width: 35%;
   }
 
   .mobileLogo {
