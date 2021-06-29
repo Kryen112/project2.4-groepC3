@@ -65,15 +65,12 @@ button {
     margin-right: auto;
     height: auto;
     max-width: 100%;
+    padding-bottom: 3%;
   }
 
   form {
     display: flex;
     margin-top: 5%;
-  }
-
-  img {
-    padding-bottom: 3%;
   }
 
   table {
@@ -85,6 +82,7 @@ button {
 
   tr {
     text-align: center;
+    display: flex;
   }
 
   button {
@@ -104,4 +102,3 @@ button {
     color: white;
   }
 }
-

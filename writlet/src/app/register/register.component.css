@@ -47,7 +47,6 @@ button {
   margin-right: auto;
 }
 
-
 /* desktop */
 @media screen and (min-width: 768px) {
 
@@ -61,14 +60,16 @@ button {
 
   .logo {
     display: block;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+    max-width: 100%;
+    padding-bottom: 3%;
   }
+
   form {
     display: flex;
     margin-top: 5%;
-  }
-
-  img {
-    padding-bottom: 3%;
   }
 
   table {
@@ -80,6 +81,7 @@ button {
 
   tr {
     text-align: center;
+    display: flex;
   }
 
   button {
@@ -91,6 +93,7 @@ button {
     margin-top: 2%;
     width: 26%;
     height: 5%;
+    min-width: 72px;
   }
 
   button:hover {
@@ -99,3 +102,25 @@ button {
   }
 }
 
+/* The message box is shown when the user clicks on the password field */
+#message {
+  display:none;
+  background: #f1f1f1;
+  color: #000;
+  position: relative;
+  padding: 20px;
+  margin-top: 10px;
+}
+
+#message p {
+  padding: 10px 35px;
+  font-size: 18px;
+}
+
+.valid {
+  color: green;
+}
+
+.invalid {
+  color: red;
+}

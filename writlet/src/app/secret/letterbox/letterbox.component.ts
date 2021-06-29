@@ -18,7 +18,7 @@ export class LetterboxComponent implements OnInit {
     this.getMail();
   }
 
-  getMail(){
+  getMail(): void {
     let user = this.authService.getUser();
     console.log('username: ' + user);
     this.commService.getMail(user)
@@ -29,7 +29,7 @@ export class LetterboxComponent implements OnInit {
         });
   }
 
-  parseDate(dateString: string) {
+  parseDate(dateString: string): string {
     let date = new Date(dateString)
     return date.toDateString()
   }
