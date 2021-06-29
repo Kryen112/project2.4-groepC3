@@ -115,7 +115,3 @@ interface Letter {
 interface Penpals {
   name: string
 }
-
-
-
-

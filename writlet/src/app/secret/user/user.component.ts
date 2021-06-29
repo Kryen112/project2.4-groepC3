@@ -19,6 +19,7 @@ export class UserComponent implements OnInit {
   capital: boolean;
   number: boolean;
   length: boolean;
+  show: boolean;
 
   constructor(private fb:FormBuilder,
               private authService: AuthService,
@@ -36,8 +37,8 @@ export class UserComponent implements OnInit {
 
   onKeyUp(): void {
     let pwd = this.form.get('newerPassword');
-
-    document.getElementById("message").style.display = "block";
+    this.show = true;
+    //document.getElementById("message").style.display = "block";
 
     if (pwd) {
       // Validate lowercase letters
@@ -79,6 +80,20 @@ export class UserComponent implements OnInit {
     } else {
       x.type = "password";
     }
+  }
+
+  showSecond(): void{
+    let x = <HTMLInputElement>document.getElementById("oldPassword");
+    if (x.type === "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+  }
+
+
+  disablePopup(): void{
+    this.show = false;
   }
 
   userUpdated(): void {
