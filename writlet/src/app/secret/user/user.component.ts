@@ -89,15 +89,16 @@ export class UserComponent implements OnInit {
           .subscribe(
             (info) => {
               this.data = info;
+              console.log(this.data);
               if(val.name === this.oldname){
-                alert('New username cannot be old username');
+                alert('New username cannot be old username.');
                 return;
               }
-              if(this.data['message'] === 'User exists'){
-                alert('Username already taken');
+              if(this.data['message'] === 'user exists'){
+                alert('Username already taken.');
                 return;
               }
-              if(this.data['message'] === 'User not found'){
+              if(this.data['message'] === 'user not found'){
                 this.authService.userInfo(this.oldname)
                   .subscribe(
                     (info) => {
@@ -109,6 +110,19 @@ export class UserComponent implements OnInit {
                               this.username = val.name;
                               if (!val.newerPassword) {
                                 this.password = '1';
+                                this.authService.userUpdated(this.username, this.oldname, this.password)
+                                  .subscribe(
+                                    () => {
+                                      alert('User information updated.');
+                                      this.authService.logout();
+                                      this.router.navigate(['home']);
+                                      return;
+                                    },
+                                    () => {
+                                      alert('Update failed.');
+                                      this.errorColor = '#ffccff';
+                                    }
+                                  );
                               }
                               if (val.newerPassword) {
                                 if (this.letter) {
@@ -120,8 +134,23 @@ export class UserComponent implements OnInit {
                                           .subscribe(
                                             (hash) => {
                                               if (hash['message'] === 'hash was a match') {
-                                                alert('New password cant be old password');
+                                                alert('New password cant be old password.');
                                                 return;
+                                              }
+                                              else{
+                                                this.authService.userUpdated(this.username, this.oldname, this.password)
+                                                  .subscribe(
+                                                    () => {
+                                                      alert('User information updated.');
+                                                      this.authService.logout();
+                                                      this.router.navigate(['home']);
+                                                      return;
+                                                    },
+                                                    () => {
+                                                      alert('Update failed.');
+                                                      this.errorColor = '#ffccff';
+                                                    }
+                                                  );
                                               }
                                             }
                                           );
@@ -138,22 +167,9 @@ export class UserComponent implements OnInit {
                                   alert('Password must contain a lowercase, alphabetic letter.');
                                 }
                               }
-                              this.authService.userUpdated(this.username, this.oldname, this.password)
-                                .subscribe(
-                                  () => {
-                                    alert('user information updated');
-                                    this.authService.logout();
-                                    this.router.navigate(['home']);
-                                    return;
-                                  },
-                                  () => {
-                                    alert('Update failed');
-                                    this.errorColor = '#ffccff';
-                                  }
-                                );
                             }
                             else{
-                              alert('Password is incorrect');
+                              alert('Password is incorrect.');
                               return;
                             }
                           }
@@ -163,7 +179,7 @@ export class UserComponent implements OnInit {
               }
             },
             () => {
-              alert('Update failed');
+              alert('Update failed.');
               this.errorColor='#ffccff';
             }
           );
@@ -180,6 +196,19 @@ export class UserComponent implements OnInit {
                       this.username = this.oldname;
                       if (!val.newerPassword) {
                         this.password = '1';
+                        this.authService.userUpdated(this.username, this.oldname, this.password)
+                          .subscribe(
+                            () => {
+                              alert('User information updated.');
+                              this.authService.logout();
+                              this.router.navigate(['home']);
+                              return;
+                            },
+                            () => {
+                              alert('Update failed.');
+                              this.errorColor = '#ffccff';
+                            }
+                          );
                       }
                       if (val.newerPassword) {
                         if (this.letter) {
@@ -191,13 +220,28 @@ export class UserComponent implements OnInit {
                                   .subscribe(
                                     (hash) => {
                                       if (hash['message'] === 'hash was a match') {
-                                        alert('new password cant be old password');
+                                        alert('New password cant be old password.');
                                         return;
+                                      }
+                                      else{
+                                        this.authService.userUpdated(this.username, this.oldname, this.password)
+                                          .subscribe(
+                                            () => {
+                                              alert('user information updated.');
+                                              this.authService.logout();
+                                              this.router.navigate(['home']);
+                                              return;
+                                            },
+                                            () => {
+                                              alert('Update failed.');
+                                              this.errorColor = '#ffccff';
+                                            }
+                                          );
                                       }
                                     }
                                   );
                               } else {
-                                alert('Password must be longer than 8 characters and smaller than 16 characters.');
+                                alert('Password must be longer than 6 characters and smaller than 16 characters.');
                               }
                             } else {
                               alert('Password must contain a number (0-9).');
@@ -209,22 +253,9 @@ export class UserComponent implements OnInit {
                           alert('Password must contain a lowercase, alphabetic letter.');
                         }
                       }
-                      this.authService.userUpdated(this.username, this.oldname, this.password)
-                        .subscribe(
-                          () => {
-                            alert('User information updated');
-                            this.authService.logout();
-                            this.router.navigate(['home']);
-                            return;
-                          },
-                          () => {
-                            alert('update failed');
-                            this.errorColor = '#ffccff';
-                          }
-                        );
                     }
                     else{
-                      alert('password is incorrect');
+                      alert('Password is incorrect.');
                       return;
                     }
                   }
