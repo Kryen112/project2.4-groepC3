@@ -63,7 +63,7 @@ export class CommunicationService {
   }
 
   removePenPals(currentUser: string, penpalToRemove: string): Observable<any> {
-    return this.http.put<any[]>(API_URL + currentUser + '/removepenpal/' + penpalToRemove,this.authService.header())
+    return this.http.put<any[]>(API_URL + currentUser + '/removepenpal/' + penpalToRemove,penpalToRemove,this.authService.header())
       .pipe (
         tap (
           res => this.sendData(res),
