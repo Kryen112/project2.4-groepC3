@@ -21,7 +21,6 @@ export class AuthService {
       headers: new HttpHeaders()
         .set('Authorization',  `Bearer ${localStorage.getItem('id_token')}`)
     }
-    console.log(localStorage.getItem('id_token'));
     return header;
   }
 
