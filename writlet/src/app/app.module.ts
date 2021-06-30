@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
 import { LetterComponent } from "./secret/letter/letter/letter.component";
 import { HttpClientModule } from '@angular/common/http';
-import { ViewComponent } from './secret/view/view.component';
 import { AboutComponent } from './about/about.component';
 import { TermsconditionsComponent } from './termsconditions/termsconditions.component';
 import { ContactComponent } from './contact/contact.component';
@@ -25,7 +24,6 @@ import {UserComponent} from "./secret/user/user.component";
   declarations: [
     AppComponent,
     LetterComponent,
-    ViewComponent,
     AboutComponent,
     TermsconditionsComponent,
     ContactComponent,
