@@ -8,9 +8,9 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-
   dropDownActive;
   show;
+
   constructor(private auth: AuthService,
               private router: Router) { }
 
@@ -28,9 +28,8 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['home']);
   }
 
-  toggleDropDown() {
+  toggleDropDown(): void {
     this.dropDownActive = !this.dropDownActive;
     this.show = !this.show;
-
   }
 }

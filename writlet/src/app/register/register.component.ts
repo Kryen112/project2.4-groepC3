@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class RegisterComponent implements OnInit {
   form:FormGroup;
-  errorColor:string = "";
+  errorColor:string = '';
   letter: boolean;
   capital: boolean;
   number: boolean;
@@ -37,44 +37,28 @@ export class RegisterComponent implements OnInit {
 
     if (pwd) {
       // Validate lowercase letters
-      var lowerCaseLetters = /[a-z]/g;
-      if(pwd.value.match(lowerCaseLetters)) {
-        this.letter = true;
-      } else {
-        this.letter = false;
-      }
+      let lowerCaseLetters = /[a-z]/g;
+      this.letter = !!pwd.value.match(lowerCaseLetters);
 
       // Validate capital letters
-      var upperCaseLetters = /[A-Z]/g;
-      if(pwd.value.match(upperCaseLetters)) {
-        this.capital = true;
-      } else {
-        this.capital = false;
-      }
+      let upperCaseLetters = /[A-Z]/g;
+      this.capital = !!pwd.value.match(upperCaseLetters);
 
       // Validate numbers
-      var numbers = /[0-9]/g;
-      if(pwd.value.match(numbers)) {
-        this.number = true;
-      } else {
-        this.number = false;
-      }
+      let numbers = /[0-9]/g;
+      this.number = !!pwd.value.match(numbers);
 
       // Validate length
-      if(pwd.value.length >= 8 && pwd.value.length < 16) {
-        this.length = true;
-      } else {
-        this.length = false;
-      }
+      this.length = pwd.value.length >= 8 && pwd.value.length < 16;
     }
   }
 
   showPassword(): void {
     let x = <HTMLInputElement>document.getElementById("password");
-    if (x.type === "password") {
-      x.type = "text";
+    if (x.type === 'password') {
+      x.type = 'text';
     } else {
-      x.type = "password";
+      x.type = 'password';
     }
   }
 
@@ -94,31 +78,31 @@ export class RegisterComponent implements OnInit {
                 this.authService.register(val.name, val.password)
                 .subscribe(
                   () => {
-                    alert("Registration successful. You can now login.");
+                    alert('Registration successful. You can now login.');
                     this.router.navigate(['/login']);
                   },
                   () => {
-                    alert(val.name + " is already taken. Registration failed.");
-                    this.errorColor="#ffccff";
+                    alert(val.name +  'is already taken. Registration failed.');
+                    this.errorColor='#ffccff';
                   }
                 );
               } else {
-                alert("Password must be longer than 6 characters and smaller than 16 characters.");
+                alert('Password must be longer than 6 characters and smaller than 16 characters.');
               }
             } else {
-              alert("Password must contain a number (0-9).");
+              alert('Password must contain a number (0-9).');
             }
           } else {
-            alert("Password must contain an uppercase, alphabetic letter.");
+            alert('Password must contain an uppercase, alphabetic letter.');
           }
         } else {
-          alert("Password must contain a lowercase, alphabetic letter.");
+          alert('Password must contain a lowercase, alphabetic letter.');
         }
       } else {
-        alert("Please enter a password.");
+        alert('Please enter a password.');
       }
     } else {
-      alert("Please enter a username.");
+      alert('Please enter a username.');
     }
   }
 }

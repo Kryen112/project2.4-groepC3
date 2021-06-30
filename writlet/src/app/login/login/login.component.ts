@@ -27,10 +27,10 @@ export class LoginComponent implements OnInit {
 
   showPassword(): void {
     let x = <HTMLInputElement>document.getElementById("password");
-    if (x.type === "password") {
-      x.type = "text";
+    if (x.type === 'password') {
+      x.type = 'text';
     } else {
-      x.type = "password";
+      x.type = 'password';
     }
   }
 
@@ -44,8 +44,8 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['home'])
           },
           () => {
-            alert("Password does not match the username.")
-            this.errorColor="#ffccff"
+            alert('Password does not match the username.')
+            this.errorColor='#ffccff'
           }
         );
     }

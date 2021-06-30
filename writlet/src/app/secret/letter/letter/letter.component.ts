@@ -43,13 +43,13 @@ export class LetterComponent implements OnInit {
         .subscribe(
         () => {
         });
-      alert("Letter sent.");
+      alert('Letter sent.');
     } else if (recipient == null) {
-      alert("There is no recipient to send your letter to.");
+      alert('There is no recipient to send your letter to.');
     } else if (title == null) {
-      alert("Please fill in a title for your letter.");
+      alert('Please fill in a title for your letter.');
     } else if (text == null) {
-      alert("There is no letter to send.")
+      alert('There is no letter to send.')
     }
     this.recipient = null;
     this.letterTitle = null;
@@ -58,9 +58,9 @@ export class LetterComponent implements OnInit {
 
   setRecipientPlaceholder(): string {
     if (this.recipient == null) {
-      return "Dear Recipient,";
+      return 'Dear Recipient,';
     }
-    return "Dear " + this.recipient + ",";
+    return 'Dear ' + this.recipient + ',';
   }
 
   getCurrentDate(): string {

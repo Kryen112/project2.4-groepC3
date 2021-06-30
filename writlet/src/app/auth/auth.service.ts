@@ -4,6 +4,7 @@ import { shareReplay, tap } from 'rxjs/operators'
 
 import * as moment from 'moment';
 import * as jwt_decode from 'jwt-decode';
+import {Observable} from "rxjs";
 
 const API_URL = 'http://localhost:5000/api/'
 
@@ -14,7 +15,7 @@ export class AuthService {
     constructor(private http: HttpClient) {
     }
 
-    login(name:string, password:string) {
+    login(name:string, password:string): Observable<any> {
         return this.http.post<User>(API_URL+'login', {name, password})
             .pipe (
                 tap (
@@ -25,7 +26,7 @@ export class AuthService {
             );
     }
 
-    register(name:string, password:string) {
+    register(name:string, password:string): Observable<any>  {
       return this.http.post<User>(API_URL+'register', {name, password})
             .pipe (
                 tap (
@@ -36,7 +37,7 @@ export class AuthService {
             );
     }
 
-    user(user: string) {
+    user(user: string): Observable<any>  {
       return this.http.get<any[]>(API_URL+'users/'+user)
         .pipe(
           tap(
@@ -47,7 +48,7 @@ export class AuthService {
       );
     }
 
-    userInfo(user: string) {
+    userInfo(user: string): Observable<any>  {
       return this.http.get<any[]>(API_URL+'userinfo/'+user)
         .pipe(
           tap(
@@ -58,11 +59,11 @@ export class AuthService {
         );
     }
 
-    private getInformation(authResult: any) {
+    private getInformation(authResult: any): AuthService  {
       return authResult;
     }
 
-    userUpdated(name:string, oldname:string, password:string) {
+    userUpdated(name:string, oldname:string, password:string): Observable<any>  {
       return this.http.post<UserUpdate>(API_URL+'userupdate', {name, oldname, password})
         .pipe (
           tap (
@@ -73,7 +74,7 @@ export class AuthService {
         );
     }
 
-    hashCheck(name:string, password:string) {
+    hashCheck(name:string, password:string): Observable<any>  {
       return this.http.get<any[]>(API_URL+'users/'+name+'/hashcheck/'+password)
         .pipe (
           tap (
@@ -84,8 +85,7 @@ export class AuthService {
         );
     }
 
-    addPenPal(user: string, penpal: string) {
-      console.log("addpenpal in authservice");
+    addPenPal(user: string, penpal: string): Observable<any>  {
       return this.http.post<Penpal>(API_URL + 'penpals', {user, penpal})
         .pipe(
           tap(
@@ -96,43 +96,43 @@ export class AuthService {
       );
     }
 
-    private userExists(authResult: any) {
+    private userExists(authResult: any): AuthService {
       return authResult;
     }
 
-    private setUser(authResult: any) {
+    private setUser(authResult: any): AuthService {
       return authResult;
     }
 
-    public isLoggedIn() {
+    public isLoggedIn(): boolean  {
         return moment().isBefore(this.getExpiration());
     }
 
-    private setSession(authResult: any) {
+    private setSession(authResult: any): void {
         const expiresAt = moment().add(authResult.expiresIn, 'milliseconds');
         localStorage.setItem('id_token', authResult.token);
         localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
     }
 
-    public logout() {
+    public logout(): void {
         localStorage.removeItem('id_token');
         localStorage.removeItem('expires_at');
     }
 
-    public getExpiration() {
+    public getExpiration(): any {
         const expiration = localStorage.getItem('expires_at') + "";
         const expiresAt = JSON.parse(expiration);
         return moment(expiresAt);
     }
 
-    private handleError(error: any) {
+    private handleError(error: any): void {
         console.log(error);
     }
 
-    public getUser() {
+    public getUser(): string {
       const jwt = localStorage.getItem('id_token');
       let obj = jwt_decode.default(jwt);
-      return obj["name"];
+      return obj['name'];
     }
 }
 

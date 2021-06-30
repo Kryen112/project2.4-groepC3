@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
 import { HttpClient } from '@angular/common/http'
 import { shareReplay, tap } from 'rxjs/operators'
-
-import * as moment from 'moment';
-import * as jwt_decode from 'jwt-decode';
+import {AuthService} from "./auth/auth.service";
 
 const API_URL = 'http://localhost:5000/api/'
 
@@ -15,7 +13,7 @@ export class CommunicationService {
   constructor(private http: HttpClient) {
   }
 
-  mail(letter: { recipient: string; text: string; send: Date; arrival: Date; title: string; username: string }) {
+  mail(letter: { recipient: string; text: string; send: Date; arrival: Date; title: string; username: string }): Observable<any> {
     return this.http.post<Letter>(API_URL + 'mail', {letter})
       .pipe(
         tap(
@@ -26,12 +24,11 @@ export class CommunicationService {
       );
   }
 
-  private sendData(authResult: any) {
+  private sendData(authResult: any):AuthService {
     return authResult;
   }
 
-  addPenPal(user: string, penpal: string) {
-    console.log("addpenpal in commservice");
+  addPenPal(user: string, penpal: string): Observable<any> {
     return this.http.post<Penpals>(API_URL + 'addpenpals', {user, penpal})
       .pipe(
         tap(
@@ -42,8 +39,7 @@ export class CommunicationService {
       );
   }
 
-  searchPenPal(searchString: string) {
-    console.log("searchPenPal in commservice");
+  searchPenPal(searchString: string): Observable<any> {
     return this.http.get<any[]>(API_URL + 'searchpenpals/' + searchString)
       .pipe(
         tap(
@@ -54,7 +50,7 @@ export class CommunicationService {
       );
   }
 
-  getPenPals(currentUser: string) {
+  getPenPals(currentUser: string): Observable<any> {
     return this.http.get<any[]>(API_URL + currentUser + '/getpenpals')
       .pipe (
         tap (
@@ -65,7 +61,7 @@ export class CommunicationService {
       );
   }
 
-  removePenPals(currentUser: string, penpalToRemove: string) {
+  removePenPals(currentUser: string, penpalToRemove: string): Observable<any> {
     return this.http.put<any[]>(API_URL + currentUser + '/removepenpal/' + penpalToRemove, penpalToRemove)
       .pipe (
         tap (
@@ -76,9 +72,7 @@ export class CommunicationService {
       );
   }
 
-  removeLetter(letter: string) {
-    console.log("Removing Letter");
-    console.log(API_URL + 'deleteletter/' + letter)
+  removeLetter(letter: string): Observable<any> {
     return this.http.delete(API_URL + 'deleteletter/' + letter)
       .pipe (
         tap (
@@ -93,7 +87,7 @@ export class CommunicationService {
     console.log(error);
   }
 
-  getMail(user: string) {
+  getMail(user: string): Observable<any> {
     return this.http.get<any[]>(API_URL + 'mymail/' + user)
       .pipe (
         tap (
@@ -103,7 +97,6 @@ export class CommunicationService {
         shareReplay()
       );
   }
-
   letter = new BehaviorSubject(null);
   sharedLetter = this.letter.asObservable();
 }

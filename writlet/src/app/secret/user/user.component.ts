@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class UserComponent implements OnInit {
   form:FormGroup;
-  errorColor:string = "";
+  errorColor = '';
   username:string;
   oldname:string = this.authService.getUser();
   password:string;
@@ -43,51 +43,35 @@ export class UserComponent implements OnInit {
     if (pwd) {
       // Validate lowercase letters
       let lowerCaseLetters = /[a-z]/g;
-      if(pwd.value.match(lowerCaseLetters)) {
-        this.letter = true;
-      } else {
-        this.letter = false;
-      }
+      this.letter = !!pwd.value.match(lowerCaseLetters);
 
       // Validate capital letters
       let upperCaseLetters = /[A-Z]/g;
-      if(pwd.value.match(upperCaseLetters)) {
-        this.capital = true;
-      } else {
-        this.capital = false;
-      }
+      this.capital = !!pwd.value.match(upperCaseLetters);
 
       // Validate numbers
       let numbers = /[0-9]/g;
-      if(pwd.value.match(numbers)) {
-        this.number = true;
-      } else {
-        this.number = false;
-      }
+      this.number = !!pwd.value.match(numbers);
 
       // Validate length
-      if(pwd.value.length >= 8 && pwd.value.length < 16) {
-        this.length = true;
-      } else {
-        this.length = false;
-      }
+      this.length = pwd.value.length >= 8;
     }
   }
   showPassword(): void {
     let x = <HTMLInputElement>document.getElementById("newPassword");
-    if (x.type === "password") {
-      x.type = "text";
+    if (x.type === 'password') {
+      x.type = 'text';
     } else {
-      x.type = "password";
+      x.type = 'password';
     }
   }
 
   showSecond(): void{
     let x = <HTMLInputElement>document.getElementById("oldPassword");
-    if (x.type === "password") {
-      x.type = "text";
+    if (x.type === 'password') {
+      x.type = 'text';
     } else {
-      x.type = "password";
+      x.type = 'password';
     }
   }
 
@@ -106,14 +90,14 @@ export class UserComponent implements OnInit {
             (info) => {
               this.data = info;
               if(val.name === this.oldname){
-                alert("new username cannot be old username");
+                alert('New username cannot be old username');
                 return;
               }
-              if(this.data['message'] === "user exists"){
-                alert("username already taken");
+              if(this.data['message'] === 'User exists'){
+                alert('Username already taken');
                 return;
               }
-              if(this.data['message'] === "user not found"){
+              if(this.data['message'] === 'User not found'){
                 this.authService.userInfo(this.oldname)
                   .subscribe(
                     (info) => {
@@ -121,10 +105,10 @@ export class UserComponent implements OnInit {
                       this.authService.hashCheck(this.oldname, val.olderPassword)
                         .subscribe(
                           (hash) => {
-                            if(hash['message'] === "hash was a match") {
+                            if(hash['message'] === 'hash was a match') {
                               this.username = val.name;
                               if (!val.newerPassword) {
-                                this.password = "1";
+                                this.password = '1';
                               }
                               if (val.newerPassword) {
                                 if (this.letter) {
@@ -135,41 +119,41 @@ export class UserComponent implements OnInit {
                                         this.authService.hashCheck(this.oldname, val.newerPassword)
                                           .subscribe(
                                             (hash) => {
-                                              if (hash['message'] === "hash was a match") {
-                                                alert("new password cant be old password");
+                                              if (hash['message'] === 'hash was a match') {
+                                                alert('New password cant be old password');
                                                 return;
                                               }
                                             }
                                           );
                                       } else {
-                                      alert("Password must be longer than 6 characters and smaller than 16 characters.");
+                                      alert('Password must be longer than 6 characters and smaller than 16 characters.');
                                       }
                                     } else {
-                                      alert("Password must contain a number (0-9).");
+                                      alert('Password must contain a number (0-9).');
                                     }
                                   } else {
-                                    alert("Password must contain an uppercase, alphabetic letter.");
+                                    alert('Password must contain an uppercase, alphabetic letter.');
                                   }
                                 } else {
-                                  alert("Password must contain a lowercase, alphabetic letter.");
+                                  alert('Password must contain a lowercase, alphabetic letter.');
                                 }
                               }
                               this.authService.userUpdated(this.username, this.oldname, this.password)
                                 .subscribe(
                                   () => {
-                                    alert("user information updated");
+                                    alert('user information updated');
                                     this.authService.logout();
                                     this.router.navigate(['home']);
                                     return;
                                   },
                                   () => {
-                                    alert("update failed");
-                                    this.errorColor = "#ffccff"
+                                    alert('Update failed');
+                                    this.errorColor = '#ffccff';
                                   }
                                 );
                             }
                             else{
-                              alert("password is incorrect");
+                              alert('Password is incorrect');
                               return;
                             }
                           }
@@ -179,8 +163,8 @@ export class UserComponent implements OnInit {
               }
             },
             () => {
-              alert("update failed");
-              this.errorColor="#ffccff"
+              alert('Update failed');
+              this.errorColor='#ffccff';
             }
           );
       }
@@ -192,10 +176,10 @@ export class UserComponent implements OnInit {
               this.authService.hashCheck(this.oldname, val.olderPassword)
                 .subscribe(
                   (hash) => {
-                    if(hash['message'] === "hash was a match") {
+                    if(hash['message'] === 'hash was a match') {
                       this.username = this.oldname;
                       if (!val.newerPassword) {
-                        this.password = "1";
+                        this.password = '1';
                       }
                       if (val.newerPassword) {
                         if (this.letter) {
@@ -206,41 +190,41 @@ export class UserComponent implements OnInit {
                                 this.authService.hashCheck(this.oldname, val.newerPassword)
                                   .subscribe(
                                     (hash) => {
-                                      if (hash['message'] === "hash was a match") {
-                                        alert("new password cant be old password");
+                                      if (hash['message'] === 'hash was a match') {
+                                        alert('new password cant be old password');
                                         return;
                                       }
                                     }
                                   );
                               } else {
-                                alert("Password must be longer than 6 characters and smaller than 16 characters.");
+                                alert('Password must be longer than 8 characters and smaller than 16 characters.');
                               }
                             } else {
-                              alert("Password must contain a number (0-9).");
+                              alert('Password must contain a number (0-9).');
                             }
                           } else {
-                            alert("Password must contain an uppercase, alphabetic letter.");
+                            alert('Password must contain an uppercase, alphabetic letter.');
                           }
                         } else {
-                          alert("Password must contain a lowercase, alphabetic letter.");
+                          alert('Password must contain a lowercase, alphabetic letter.');
                         }
                       }
                       this.authService.userUpdated(this.username, this.oldname, this.password)
                         .subscribe(
                           () => {
-                            alert("user information updated");
+                            alert('User information updated');
                             this.authService.logout();
                             this.router.navigate(['home']);
                             return;
                           },
                           () => {
-                            alert("update failed");
-                            this.errorColor = "#ffccff"
+                            alert('update failed');
+                            this.errorColor = '#ffccff';
                           }
                         );
                     }
                     else{
-                      alert("password is incorrect");
+                      alert('password is incorrect');
                       return;
                     }
                   }
@@ -249,9 +233,9 @@ export class UserComponent implements OnInit {
           );
       }
     } else if (!val.name && !val.newerPassword) {
-      alert("Please enter either a new username or new password.");
+      alert('Please enter either a new username or new password.');
     } else if (!val.olderPassword) {
-      alert("Please enter your old password to update.");
+      alert('Please enter your old password to update.');
     }
   }
 }

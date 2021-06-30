@@ -1,11 +1,10 @@
 const express = require('express');
 const fs = require('fs');
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 const cors = require('cors')
 const expressJwt = require('express-jwt');
 const bcrypt = require('bcrypt');
 const mongo = require('mongodb');
-const { allowedNodeEnvironmentFlags } = require('process');
 const MongoClient = mongo.MongoClient;
 const url = 'mongodb://localhost:27017';
 
@@ -16,15 +15,11 @@ MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (e
   for(let i = 0; i < collections.length; i++){
     db.listCollections({name: collections[i]})
       .next(function(err, collinfo) {
-        if (collinfo) {
-          console.log(collections[i] + " exists");
-        }
-        else{
+        if (!collinfo) {
           db.createCollection(collections[i]).then(() => {
           }).finally(() => {
             client.close();
           });
-          console.log(collections[i] + " created");
         }
       });
   }
@@ -62,7 +57,7 @@ app.post('/api/login', async function (req, res) {
       let name = (req.body.name).toLowerCase();
       await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
         if (err) throw err;
-        const db = client.db("writlet");
+        const db = client.db('writlet');
         let collection = db.collection('users');
         let query = {name: name}
         collection.findOne(query).then(async (user) => {
@@ -98,7 +93,7 @@ app.post('/api/register', async function (req, res) {
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
       await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
         if (err) throw err;
-        const db = client.db("writlet");
+        const db = client.db('writlet');
         let collection = db.collection('users');
         let query = {name: name}
         collection.findOne(query).then((user) => {
@@ -108,13 +103,13 @@ app.post('/api/register', async function (req, res) {
               const db = client.db("writlet");
               let user = {name: name, password: hashedPassword, penpalList: penpalList};
               db.collection('users').insertOne(user).then(() => {
-                res.status(200).json({message: "user created"});
+                res.status(200).json({message: 'user created'});
               }).finally(() => {
                 client.close();
               });
             });
           } else {
-            res.status(403).json({message: "username taken"});
+            res.status(403).json({message: 'username taken'});
           }
         }).finally(() => {
           client.close();
@@ -132,14 +127,14 @@ app.get('/api/users/:user', async function (req, res) {
   if(username) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      const db = client.db("writlet");
+      const db = client.db('writlet');
       let collection = db.collection('users');
       let query = {name: username}
       collection.findOne(query).then((user) => {
         if (!user) {
-          res.status(200).json({message: "user not found"});
+          res.status(200).json({message: 'user not found'});
         } else if (user.name === username) {
-          res.status(200).json({message: "user exists"});
+          res.status(200).json({message: 'user exists'});
         } else {
           res.sendStatus(401);
         }
@@ -155,12 +150,12 @@ app.get('/api/userinfo/:user', async function (req, res) {
   if(username) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      const db = client.db("writlet");
+      const db = client.db('writlet');
       let collection = db.collection('users');
       let query = {name: username}
       collection.findOne(query).then((user) => {
         if (!user) {
-          res.status(404).json({message: "user not found"});
+          res.status(404).json({message: 'user not found'});
         } else if (user.name === username) {
           res.status(200).json({name: user.name, password: user.password});
         } else {
@@ -181,8 +176,8 @@ app.post('/api/userupdate', async function (req, res) {
       let hashedPassword = await bcrypt.hash(req.body.password, 10);
       await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
         if (err) throw err;
-        const db = client.db("writlet");
-        if(req.body.password !== "1"){
+        const db = client.db('writlet');
+        if(req.body.password !== '1'){
           db.collection('users').updateOne({name: user}, {
             $set: {
               name: newUser,
@@ -193,7 +188,7 @@ app.post('/api/userupdate', async function (req, res) {
             client.close();
           });
         }
-        else if(req.body.password === "1"){
+        else if(req.body.password === '1'){
           db.collection('users').updateOne({name: user}, {
             $set: {
               name: newUser
@@ -203,8 +198,8 @@ app.post('/api/userupdate', async function (req, res) {
             client.close();
           });
         }
-        db.collection('users').updateMany({penpalList: user}, {$set: {"penpalList.$": newUser}}).then(() => {
-          res.status(200).json({message: "information updated"});
+        db.collection('users').updateMany({penpalList: user}, {$set: {'penpalList.$': newUser}}).then(() => {
+          res.status(200).json({message: 'information updated'});
         }).finally(() => {
           client.close();
         });
@@ -222,18 +217,18 @@ app.get('/api/users/:user/hashcheck/:password', async function (req, res) {
   if(username && password) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      const db = client.db("writlet");
+      const db = client.db('writlet');
       let collection = db.collection('users');
       let query = {name: username}
       collection.findOne(query).then(async (user) => {
         if (!user) {
-          res.status(404).json({message: "could not check hash"});
+          res.status(404).json({message: 'could not check hash'});
         } else if (user.name === username) {
           if(await bcrypt.compare(password, user.password)){
-            res.status(200).json({message: "hash was a match"});
+            res.status(200).json({message: 'hash was a match'});
           }
           else{
-            res.status(200).json({message: "hash was no match"});
+            res.status(200).json({message: 'hash was no match'});
           }
         } else {
           res.sendStatus(401);
@@ -249,10 +244,10 @@ app.post('/api/mail', async function (req, res) {
   if (req.body.letter) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      const db = client.db("writlet");
+      const db = client.db('writlet');
       let letter = {letter: req.body.letter};
       db.collection('mail').insertOne(letter).then(() => {
-        res.status(200).json({message: "mail send"});
+        res.status(200).json({message: 'mail sent'});
       }).finally(() => {
         client.close();
       });
@@ -265,9 +260,9 @@ app.get('/api/mymail/:user', async function (req, res) {
   if (username) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      const db = client.db("writlet");
+      const db = client.db('writlet');
       let collection = db.collection('mail');
-      let query = {"letter.recipient": username}
+      let query = {'letter.recipient': username}
       collection.find(query).toArray(function (error, data) {
         if (error) {
           console.log(error);
@@ -285,7 +280,7 @@ app.get('/api/penpals/:user', async function (req, res) {
   if (username) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      const db = client.db("writlet");
+      const db = client.db('writlet');
       let collection = db.collection('users');
       let query = {name: username}
       collection.findOne(query).then((user) => {
@@ -307,9 +302,9 @@ app.post('/api/addpenpals', async function (req, res) {
     let userToAdd = (req.body.penpal).toLowerCase();
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      const db = client.db("writlet");
+      const db = client.db('writlet');
       db.collection('users').updateOne({name: currentUser}, {$addToSet: {penpalList: userToAdd}}).then(() => {
-        res.status(200).json({message: "penpal added"});
+        res.status(200).json({message: 'penpal added'});
       }).finally(() => {
         client.close();
       });
@@ -322,7 +317,7 @@ app.get('/api/searchpenpals/:searchString', async function (req, res) {
   if (searchString) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      const db = client.db("writlet");
+      const db = client.db('writlet');
       let collection = db.collection('users');
       let query = {name: {'$regex': searchString, '$options': 'i'}};
       collection.find(query).toArray(function (error, data) {
@@ -346,7 +341,7 @@ app.get('/api/:currentUser/getpenpals', async function (req, res) {
   if (currentUser) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
-      const db = client.db("writlet");
+      const db = client.db('writlet');
       let collection = db.collection('users');
       let query = {name: currentUser};
       collection.find(query).toArray(function (error, data) {
@@ -366,9 +361,9 @@ app.put('/api/:currentUser/removepenpal/:penpalToRemove', async function (req, r
   let penpalToRemove = req.params.penpalToRemove;
   await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
     if (err) throw err;
-    const db = client.db("writlet");
+    const db = client.db('writlet');
     let collection = db.collection('users');
-    collection.updateOne({name: currentUser}, {"$pull": {"penpalList": penpalToRemove}}, (function (error) {
+    collection.updateOne({name: currentUser}, {'$pull': {'penpalList': penpalToRemove}}, (function (error) {
       if (error) {
         console.log(error);
       } else {
@@ -380,11 +375,10 @@ app.put('/api/:currentUser/removepenpal/:penpalToRemove', async function (req, r
 });
 
 app.delete('/api/deleteletter/:id', async function (req, res) {
-  console.log('eerste check api delete');
   let currentLetter = req.params.id;
   await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
     if (err) throw err;
-    const db = client.db("writlet");
+    const db = client.db('writlet');
     let collection = db.collection('mail');
     collection.deleteOne({_id: mongo.ObjectId(currentLetter)},  (function (error) {
       if (error) {
@@ -399,12 +393,11 @@ app.delete('/api/deleteletter/:id', async function (req, res) {
 
 app.route('/api/secret')
 .get(checkIfAuthenticated, function (req, res) {
-res.json({ message: "Success! You can not see this without a token" });
+res.json({ message: 'Success! You can not see this without a token' });
 })
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, function () {
-console.log("Express starting listening on port " + PORT);
-
+console.log('Express starting listening on port ' + PORT);
 });

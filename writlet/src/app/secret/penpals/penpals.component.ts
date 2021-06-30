@@ -19,9 +19,9 @@ export class PenpalsComponent implements OnInit {
 
   constructor(private commService: CommunicationService,
               private authService: AuthService,
-              private fb: FormBuilder,
-              private router: Router) {
+              private fb: FormBuilder)
 
+  {
     this.form = this.fb.group({
       penpal: ['',Validators.required]
     });
@@ -32,46 +32,36 @@ export class PenpalsComponent implements OnInit {
   }
 
   addPenPal(penpal: string): void {
-    console.log("addpenpal in penpals component");
     let currentUser = this.authService.getUser();
     this.commService.addPenPal(currentUser, penpal)
     .subscribe( () => {
-      console.log(currentUser + ' ' + penpal);
     });
     this.getPenPals();
   }
 
   searchPenPal(): void {
-    console.log("Searching pen pals");
     this.searchPenpals = new Array;
     const val = this.form.value;
     let searchString = val.penpal;
     this.commService.searchPenPal(searchString)
     .subscribe( (searchPals) => {
       this.searchPenpals = searchPals;
-      console.log(this.searchPenpals);
     });
   }
 
   getPenPals(): void {
-    console.log("Getting pen pals");
     let user = this.authService.getUser();
-    console.log('username: ' + user);
     this.commService.getPenPals(user)
       .subscribe(
         (currentPals) => {
           this.currentPenpals = currentPals[0].penpalList.sort();
-          console.log(this.currentPenpals);
         });
   }
 
   removePenPal(penpal: string): void {
-    console.log("Removing pen pal");
     let user = this.authService.getUser();
     this.commService.removePenPals(user, penpal)
       .subscribe(() => { });
     this.getPenPals();
   }
-
-
 }

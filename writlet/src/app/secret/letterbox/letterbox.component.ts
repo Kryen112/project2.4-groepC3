@@ -38,15 +38,15 @@ export class LetterboxComponent implements OnInit {
     return date.toDateString()
   }
 
-  getDate(dateString: string) {
+  getDate(dateString: string): boolean {
     let deliverDate = new Date(dateString);
     let currentDate = new Date();
     return currentDate > deliverDate;
   }
 
-  setReadableLetters(data: any[]) {
+  setReadableLetters(data: any[]): void {
     for (let letter of data) {
-      if (this.getDate(letter['letter']['time'])) {
+      if (this.getDate(letter['letter']['arrival'])) {
 
         this.readableLetters.push(letter);
       }
