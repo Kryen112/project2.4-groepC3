@@ -6,7 +6,7 @@ import { HeaderModule } from "./header/header.module";
 import { FooterModule } from "./footer/footer.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AppRoutingModule } from './app-routing.module';
-import { LetterComponent } from "./secret/letter/letter/letter.component";
+import { LetterComponent } from "./secret/letter/letter.component";
 import { HttpClientModule } from '@angular/common/http';
 import { AboutComponent } from './about/about.component';
 import { TermsconditionsComponent } from './termsconditions/termsconditions.component';
