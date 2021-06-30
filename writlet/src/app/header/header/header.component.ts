@@ -10,6 +10,8 @@ import { AuthService } from 'src/app/auth/auth.service';
 export class HeaderComponent implements OnInit {
   dropDownActive;
   show;
+  dropDownRightActive;
+  showRight;
 
   constructor(private auth: AuthService,
               private router: Router) { }
@@ -31,5 +33,16 @@ export class HeaderComponent implements OnInit {
   toggleDropDown(): void {
     this.dropDownActive = !this.dropDownActive;
     this.show = !this.show;
+
+    this.showRight = false;
+    this.dropDownRightActive = false;
+  }
+
+  toggleDropDownRight(): void {
+    this.dropDownRightActive = !this.dropDownRightActive;
+    this.showRight = !this.showRight;
+
+    this.dropDownActive = false;
+    this.show = false;
   }
 }

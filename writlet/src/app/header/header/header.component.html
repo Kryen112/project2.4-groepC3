@@ -17,7 +17,17 @@
         <a *ngIf="!checkLoggedIn()" routerLink="register" (click)="toggleDropDown()">Register</a>
       </div>
     </div>
-    <img src="assets/img/headerlogo.png" routerLink="home" height="48px" width="48px" class="headerLogo">
+    <div class="dropdownRight">
+      <img src="assets/img/headerlogo.png" (click)="toggleDropDownRight()" height="48px" width="48px" class="headerLogo">
+      <div *ngIf="dropDownRightActive" class="dropdown-content-right" [ngClass]="{'show': showRight}">
+        <a routerLink="home" (click)="toggleDropDownRight()">Home</a>
+        <a routerLink="about" (click)="toggleDropDownRight()">About</a>
+        <a routerLink="termsconditions" (click)="toggleDropDownRight()">Terms of Service</a>
+        <a routerLink="contact" (click)="toggleDropDownRight()">Contact</a>
+        <a routerLink="help" (click)="toggleDropDownRight()">Help</a>
+      </div>
+    </div>
+
   </div>
 </div>
 
