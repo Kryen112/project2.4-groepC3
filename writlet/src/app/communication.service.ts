@@ -10,11 +10,12 @@ const API_URL = 'http://localhost:5000/api/'
   providedIn: 'root'
 })
 export class CommunicationService {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private authService: AuthService,) {
   }
 
   mail(letter: { recipient: string; text: string; send: Date; arrival: Date; title: string; username: string }): Observable<any> {
-    return this.http.post<Letter>(API_URL + 'mail', {letter})
+    return this.http.post<Letter>(API_URL + 'mail', {letter},this.authService.header())
       .pipe(
         tap(
           res => this.sendData(res),
@@ -29,7 +30,7 @@ export class CommunicationService {
   }
 
   addPenPal(user: string, penpal: string): Observable<any> {
-    return this.http.post<Penpals>(API_URL + 'addpenpals', {user, penpal})
+    return this.http.post<Penpals>(API_URL + 'addpenpals', {user, penpal},this.authService.header())
       .pipe(
         tap(
           res => this.sendData(res),
@@ -40,7 +41,7 @@ export class CommunicationService {
   }
 
   searchPenPal(searchString: string): Observable<any> {
-    return this.http.get<any[]>(API_URL + 'searchpenpals/' + searchString)
+    return this.http.get<any[]>(API_URL + 'searchpenpals/' + searchString,this.authService.header())
       .pipe(
         tap(
           res => this.sendData(res),
@@ -51,7 +52,7 @@ export class CommunicationService {
   }
 
   getPenPals(currentUser: string): Observable<any> {
-    return this.http.get<any[]>(API_URL + currentUser + '/getpenpals')
+    return this.http.get<any[]>(API_URL + currentUser + '/getpenpals',this.authService.header())
       .pipe (
         tap (
           res => this.sendData(res),
@@ -62,7 +63,7 @@ export class CommunicationService {
   }
 
   removePenPals(currentUser: string, penpalToRemove: string): Observable<any> {
-    return this.http.put<any[]>(API_URL + currentUser + '/removepenpal/' + penpalToRemove, penpalToRemove)
+    return this.http.put<any[]>(API_URL + currentUser + '/removepenpal/' + penpalToRemove,this.authService.header())
       .pipe (
         tap (
           res => this.sendData(res),
@@ -73,7 +74,7 @@ export class CommunicationService {
   }
 
   removeLetter(letter: string): Observable<any> {
-    return this.http.delete(API_URL + 'deleteletter/' + letter)
+    return this.http.delete(API_URL + 'deleteletter/' + letter,this.authService.header())
       .pipe (
         tap (
           res => this.sendData(res),
@@ -88,7 +89,7 @@ export class CommunicationService {
   }
 
   getMail(user: string): Observable<any> {
-    return this.http.get<any[]>(API_URL + 'mymail/' + user)
+    return this.http.get<any[]>(API_URL + 'mymail/' + user,this.authService.header())
       .pipe (
         tap (
           res => this.sendData(res),

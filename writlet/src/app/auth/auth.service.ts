@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { shareReplay, tap } from 'rxjs/operators'
+import { HttpHeaders } from "@angular/common/http";
 
 import * as moment from 'moment';
 import * as jwt_decode from 'jwt-decode';
@@ -14,6 +15,15 @@ const API_URL = 'http://localhost:5000/api/'
 export class AuthService {
     constructor(private http: HttpClient) {
     }
+
+  public header(): { headers: HttpHeaders } {
+    let header = {
+      headers: new HttpHeaders()
+        .set('Authorization',  `Bearer ${localStorage.getItem('id_token')}`)
+    }
+    console.log(localStorage.getItem('id_token'));
+    return header;
+  }
 
     login(name:string, password:string): Observable<any> {
         return this.http.post<User>(API_URL+'login', {name, password})
@@ -38,7 +48,7 @@ export class AuthService {
     }
 
     user(user: string): Observable<any>  {
-      return this.http.get<any[]>(API_URL+'users/'+user)
+      return this.http.get<any[]>(API_URL+'users/'+user,this.header())
         .pipe(
           tap(
             res => this.userExists(res),
@@ -49,7 +59,7 @@ export class AuthService {
     }
 
     userInfo(user: string): Observable<any>  {
-      return this.http.get<any[]>(API_URL+'userinfo/'+user)
+      return this.http.get<any[]>(API_URL+'userinfo/'+user,this.header())
         .pipe(
           tap(
             res => this.getInformation(res),
@@ -64,7 +74,7 @@ export class AuthService {
     }
 
     userUpdated(name:string, oldname:string, password:string): Observable<any>  {
-      return this.http.post<UserUpdate>(API_URL+'userupdate', {name, oldname, password})
+      return this.http.post<UserUpdate>(API_URL+'userupdate', {name, oldname, password},this.header())
         .pipe (
           tap (
             res => this.userExists(res),
@@ -75,7 +85,7 @@ export class AuthService {
     }
 
     hashCheck(name:string, password:string): Observable<any>  {
-      return this.http.get<any[]>(API_URL+'users/'+name+'/hashcheck/'+password)
+      return this.http.get<any[]>(API_URL+'users/'+name+'/hashcheck/'+password,this.header())
         .pipe (
           tap (
             res => this.userExists(res),
@@ -86,7 +96,7 @@ export class AuthService {
     }
 
     addPenPal(user: string, penpal: string): Observable<any>  {
-      return this.http.post<Penpal>(API_URL + 'penpals', {user, penpal})
+      return this.http.post<Penpal>(API_URL + 'penpals', {user, penpal},this.header())
         .pipe(
           tap(
             res => this.userExists(res),

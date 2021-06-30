@@ -87,42 +87,45 @@ app.post('/api/login', async function (req, res) {
 
 app.post('/api/register', async function (req, res) {
   if (req.body.name && req.body.password) {
-    let name = (req.body.name).toLowerCase();
-    let penpalList = [name];
-    try{
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
-      await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
-        if (err) throw err;
-        const db = client.db('writlet');
-        let collection = db.collection('users');
-        let query = {name: name}
-        collection.findOne(query).then((user) => {
-          if (!user) {
-            MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
-              if (err) throw err;
-              const db = client.db("writlet");
-              let user = {name: name, password: hashedPassword, penpalList: penpalList};
-              db.collection('users').insertOne(user).then(() => {
-                res.status(200).json({message: 'user created'});
-              }).finally(() => {
-                client.close();
+    let regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,16})");
+    if(regex.test(req.body.password)){
+      let name = (req.body.name).toLowerCase();
+      let penpalList = [name];
+      try{
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+          if (err) throw err;
+          const db = client.db('writlet');
+          let collection = db.collection('users');
+          let query = {name: name}
+          collection.findOne(query).then((user) => {
+            if (!user) {
+              MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+                if (err) throw err;
+                const db = client.db("writlet");
+                let user = {name: name, password: hashedPassword, penpalList: penpalList};
+                db.collection('users').insertOne(user).then(() => {
+                  res.status(200).json({message: 'user created'});
+                }).finally(() => {
+                  client.close();
+                });
               });
-            });
-          } else {
-            res.status(403).json({message: 'username taken'});
-          }
-        }).finally(() => {
-          client.close();
+            } else {
+              res.status(403).json({message: 'username taken'});
+            }
+          }).finally(() => {
+            client.close();
+          });
         });
-      });
-    }
-    catch{
-      res.sendStatus(500);
+      }
+      catch{
+        res.sendStatus(500);
+      }
     }
   }
 });
 
-app.get('/api/users/:user', async function (req, res) {
+app.get('/api/users/:user/', authenticateToken, async function (req, res) {
   let username = req.params.user;
   if(username) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
@@ -145,7 +148,7 @@ app.get('/api/users/:user', async function (req, res) {
   }
 });
 
-app.get('/api/userinfo/:user', async function (req, res) {
+app.get('/api/userinfo/:user', authenticateToken, async function (req, res) {
   let username = req.params.user;
   if(username) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
@@ -168,7 +171,7 @@ app.get('/api/userinfo/:user', async function (req, res) {
   }
 });
 
-app.post('/api/userupdate', async function (req, res) {
+app.post('/api/userupdate', authenticateToken, async function (req, res) {
   if (req.body.name && req.body.oldname && req.body.password) {
     try {
       let user = (req.body.oldname).toLowerCase();
@@ -211,7 +214,7 @@ app.post('/api/userupdate', async function (req, res) {
   }
 });
 
-app.get('/api/users/:user/hashcheck/:password', async function (req, res) {
+app.get('/api/users/:user/hashcheck/:password', authenticateToken, async function (req, res) {
   let username = req.params.user;
   let password = req.params.password;
   if(username && password) {
@@ -240,7 +243,7 @@ app.get('/api/users/:user/hashcheck/:password', async function (req, res) {
   }
 });
 
-app.post('/api/mail', async function (req, res) {
+app.post('/api/mail', authenticateToken, async function (req, res) {
   if (req.body.letter) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
       if (err) throw err;
@@ -255,7 +258,7 @@ app.post('/api/mail', async function (req, res) {
   }
 });
 
-app.get('/api/mymail/:user', async function (req, res) {
+app.get('/api/mymail/:user', authenticateToken, async function (req, res) {
   let username = req.params.user;
   if (username) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
@@ -275,7 +278,7 @@ app.get('/api/mymail/:user', async function (req, res) {
   }
 });
 
-app.get('/api/penpals/:user', async function (req, res) {
+app.get('/api/penpals/:user', authenticateToken, async function (req, res) {
   let username = req.params.user;
   if (username) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
@@ -296,7 +299,7 @@ app.get('/api/penpals/:user', async function (req, res) {
   }
 });
 
-app.post('/api/addpenpals', async function (req, res) {
+app.post('/api/addpenpals', authenticateToken, async function (req, res) {
   if (req.body.user && req.body.penpal) {
     let currentUser = (req.body.user).toLowerCase();
     let userToAdd = (req.body.penpal).toLowerCase();
@@ -312,7 +315,7 @@ app.post('/api/addpenpals', async function (req, res) {
   }
 });
 
-app.get('/api/searchpenpals/:searchString', async function (req, res) {
+app.get('/api/searchpenpals/:searchString', authenticateToken, async function (req, res) {
   let searchString = req.params.searchString;
   if (searchString) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
@@ -336,7 +339,7 @@ app.get('/api/searchpenpals/:searchString', async function (req, res) {
   }
 });
 
-app.get('/api/:currentUser/getpenpals', async function (req, res) {
+app.get('/api/:currentUser/getpenpals', authenticateToken, async function (req, res) {
   let currentUser = req.params.currentUser;
   if (currentUser) {
     await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
@@ -356,7 +359,7 @@ app.get('/api/:currentUser/getpenpals', async function (req, res) {
   }
 });
 
-app.put('/api/:currentUser/removepenpal/:penpalToRemove', async function (req, res) {
+app.put('/api/:currentUser/removepenpal/:penpalToRemove', authenticateToken, async function (req, res) {
   let currentUser = req.params.currentUser;
   let penpalToRemove = req.params.penpalToRemove;
   await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
@@ -374,7 +377,7 @@ app.put('/api/:currentUser/removepenpal/:penpalToRemove', async function (req, r
   });
 });
 
-app.delete('/api/deleteletter/:id', async function (req, res) {
+app.delete('/api/deleteletter/:id', authenticateToken, async function (req, res) {
   let currentLetter = req.params.id;
   await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
     if (err) throw err;
@@ -395,6 +398,16 @@ app.route('/api/secret')
 .get(checkIfAuthenticated, function (req, res) {
 res.json({ message: 'Success! You can not see this without a token' });
 })
+
+function authenticateToken(req, res, next){
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if(token === null) return res.sendStatus(401);
+  jwt.verify(token, publicKey, (err) => {
+    if(err) return res.sendStatus(403);
+    next();
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 
