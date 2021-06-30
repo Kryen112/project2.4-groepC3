@@ -17,9 +17,10 @@ import { HelpComponent } from './help/help.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { RegisterComponent } from './register/register.component';
-import {LetterboxComponent} from "./secret/letterbox/letterbox.component";
-import {PenpalsComponent} from "./secret/penpals/penpals.component";
-import {UserComponent} from "./secret/user/user.component";
+import { LetterboxComponent } from "./secret/letterbox/letterbox.component";
+import { PenpalsComponent } from "./secret/penpals/penpals.component";
+import { UserComponent } from "./secret/user/user.component";
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import {UserComponent} from "./secret/user/user.component";
     RegisterComponent,
     LetterboxComponent,
     PenpalsComponent,
-    UserComponent
+    UserComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
