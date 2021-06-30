@@ -97,8 +97,6 @@ export class CommunicationService {
         shareReplay()
       );
   }
-  letter = new BehaviorSubject(null);
-  sharedLetter = this.letter.asObservable();
 }
 
 interface Letter {

@@ -12,7 +12,6 @@ import { AboutComponent } from './about/about.component';
 import { TermsconditionsComponent } from './termsconditions/termsconditions.component';
 import { ContactComponent } from './contact/contact.component';
 import { HelpComponent } from './help/help.component';
-
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { RegisterComponent } from './register/register.component';
