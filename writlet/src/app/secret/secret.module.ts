@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { LetterComponent } from './letter/letter/letter.component';
+import { LetterComponent } from './letter/letter.component';
 import { FormsModule } from '@angular/forms';
 import { LetterboxComponent } from './letterbox/letterbox.component';
 import { PenpalsComponent } from './penpals/penpals.component';

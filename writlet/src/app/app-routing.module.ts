@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home/home.component';
+import { HomeComponent } from './home/home.component';
 import { AuthGuardService as guard } from './auth/auth-guard.service';
 import { AuthService } from './auth/auth.service'
 import { AboutComponent } from "./about/about.component";
@@ -8,6 +8,7 @@ import { TermsconditionsComponent } from "./termsconditions/termsconditions.comp
 import { ContactComponent } from "./contact/contact.component";
 import { HelpComponent } from "./help/help.component";
 import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -17,10 +18,7 @@ const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'help', component: HelpComponent },
   { path: 'register', component: RegisterComponent },
-  {
-    path: 'login',
-    loadChildren: () => import('./login/login.module').then(m => m.LoginModule)
-  },
+  { path: 'login', component: LoginComponent },
   {
     path: 'secret',
     loadChildren: () => import('./secret/secret.module').then(m => m.SecretModule), canActivate: [guard]

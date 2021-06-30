@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CommunicationService} from "../../../communication.service";
+import {CommunicationService} from "../../communication.service";
 import {AuthService} from 'src/app/auth/auth.service';
 
 @Component({

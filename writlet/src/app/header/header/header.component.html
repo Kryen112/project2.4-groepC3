@@ -6,7 +6,7 @@
 <div class="mobile">
   <div class="headerBar">
     <div class="dropdown">
-      <img src="assets/img/menuicon.png" (click)="toggleDropDown()" class="dropmenu">
+      <img src="assets/img/menuicon.png" (click)="toggleDropDown()" class="dropmenu" alt="menuIcon">
       <div *ngIf="dropDownActive" class="dropdown-content" [ngClass]="{'show': show}">
         <a *ngIf="checkLoggedIn()" routerLink="secret/letterbox" (click)="toggleDropDown()">Letterbox</a>
         <a *ngIf="checkLoggedIn()" routerLink="secret/user" (click)="toggleDropDown()">User</a>
@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="dropdownRight">
-      <img src="assets/img/headerlogo.png" (click)="toggleDropDownRight()" height="48px" width="48px" class="headerLogo">
+      <img src="assets/img/headerlogo.png" (click)="toggleDropDownRight()" height="48px" width="48px" class="headerLogo" alt="headerLogo">
       <div *ngIf="dropDownRightActive" class="dropdown-content-right" [ngClass]="{'show': showRight}">
         <a routerLink="home" (click)="toggleDropDownRight()">Home</a>
         <a routerLink="about" (click)="toggleDropDownRight()">About</a>
@@ -33,14 +33,14 @@
 
 <div class="desktop">
   <ul>
-    <a routerLink="home" class="headerLogo"><img src="assets/img/headerlogo.png" height="48px" width="48px"></a>
-    <li><a routerLink="home">Home</a></li>
-    <li *ngIf="checkLoggedIn()"><a routerLink="secret/letterbox">Letterbox</a></li>
-    <li *ngIf="checkLoggedIn()"><a routerLink="secret/user">User</a></li>
-    <li *ngIf="checkLoggedIn()"><a routerLink="secret/penpals">Pen Pals</a></li>
-    <li *ngIf="checkLoggedIn()"><a routerLink="secret/letter">Writ</a></li>
-    <li *ngIf="checkLoggedIn()" (click)="logout()"><a>Logout</a></li>
-    <li *ngIf="!checkLoggedIn()"><a routerLink="login">Login</a></li>
+    <li class="headerLogo"><a routerLink="home" class="headerLogo"><img src="assets/img/headerlogo.png" height="48px" width="48px" alt="headerLogo"></a></li>
+    <li><a routerLink="home" class="headerLink">Home</a></li>
+    <li *ngIf="checkLoggedIn()"><a routerLink="secret/letterbox" class="headerLink">Letterbox</a></li>
+    <li *ngIf="checkLoggedIn()"><a routerLink="secret/user" class="headerLink">User</a></li>
+    <li *ngIf="checkLoggedIn()"><a routerLink="secret/penpals" class="headerLink">Pen Pals</a></li>
+    <li *ngIf="checkLoggedIn()"><a routerLink="secret/letter" class="headerLink">Writ</a></li>
+    <li *ngIf="checkLoggedIn()" (click)="logout()"><a routerLink="secret/home" class="headerLink">Logout</a></li>
+    <li *ngIf="!checkLoggedIn()"><a routerLink="login" class="headerLink">Login</a></li>
   </ul>
   <br/>
 </div>
