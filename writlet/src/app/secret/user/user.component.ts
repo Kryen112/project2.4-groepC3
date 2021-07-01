@@ -38,7 +38,6 @@ export class UserComponent implements OnInit {
   onKeyUp(): void {
     let pwd = this.form.get('newerPassword');
     this.show = true;
-    //document.getElementById("message").style.display = "block";
 
     if (pwd) {
       // Validate lowercase letters
@@ -58,7 +57,7 @@ export class UserComponent implements OnInit {
     }
   }
   showPassword(): void {
-    let x = <HTMLInputElement>document.getElementById("newPassword");
+    let x = <HTMLInputElement>document.getElementById('newPassword');
     if (x.type === 'password') {
       x.type = 'text';
     } else {
@@ -67,7 +66,7 @@ export class UserComponent implements OnInit {
   }
 
   showSecond(): void{
-    let x = <HTMLInputElement>document.getElementById("oldPassword");
+    let x = <HTMLInputElement>document.getElementById('oldPassword');
     if (x.type === 'password') {
       x.type = 'text';
     } else {

@@ -1,9 +1,7 @@
-import { ArrayType } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
 import { CommunicationService } from 'src/app/communication.service';
-import {Router, RouterModule} from "@angular/router";
 
 @Component({
   selector: 'app-penpals',

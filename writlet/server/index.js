@@ -87,40 +87,37 @@ app.post('/api/login', async function (req, res) {
 
 app.post('/api/register', async function (req, res) {
   if (req.body.name && req.body.password) {
-    let regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,16})");
-    if(regex.test(req.body.password)){
-      let name = (req.body.name).toLowerCase();
-      let penpalList = [name];
-      try{
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
-          if (err) throw err;
-          const db = client.db('writlet');
-          let collection = db.collection('users');
-          let query = {name: name}
-          collection.findOne(query).then((user) => {
-            if (!user) {
-              MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
-                if (err) throw err;
-                const db = client.db("writlet");
-                let user = {name: name, password: hashedPassword, penpalList: penpalList};
-                db.collection('users').insertOne(user).then(() => {
-                  res.status(200).json({message: 'user created'});
-                }).finally(() => {
-                  client.close();
-                });
+    let name = (req.body.name).toLowerCase();
+    let penpalList = [name];
+    try{
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+        if (err) throw err;
+        const db = client.db('writlet');
+        let collection = db.collection('users');
+        let query = {name: name}
+        collection.findOne(query).then((user) => {
+          if (!user) {
+            MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+              if (err) throw err;
+              const db = client.db('writlet');
+              let user = {name: name, password: hashedPassword, penpalList: penpalList};
+              db.collection('users').insertOne(user).then(() => {
+                res.status(200).json({message: 'user created'});
+              }).finally(() => {
+                client.close();
               });
-            } else {
-              res.status(403).json({message: 'username taken'});
-            }
-          }).finally(() => {
-            client.close();
-          });
+            });
+          } else {
+            res.status(403).json({message: 'username taken'});
+          }
+        }).finally(() => {
+          client.close();
         });
-      }
-      catch{
-        res.sendStatus(500);
-      }
+      });
+    }
+    catch{
+      res.sendStatus(500);
     }
   }
 });

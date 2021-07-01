@@ -4,9 +4,10 @@
     content="App component page for Writlet webapplication">
 </head>
 <div class="mainPage">
+  <a class="skip-link" href="#maincontent">Skip to main</a>
     <app-header *ngIf="!checkHomeScreen() || checkLoggedIn()"></app-header>
 
-    <router-outlet></router-outlet>
+    <router-outlet id="maincontent"></router-outlet>
 
     <div *ngIf="checkHomeScreen() && !checkLoggedIn()" class="imagewrapper">
         <img src="assets/img/writletlogotransparent.png" alt="Writlet image" class="frontpageimage">

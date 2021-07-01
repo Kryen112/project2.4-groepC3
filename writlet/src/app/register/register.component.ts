@@ -54,7 +54,7 @@ export class RegisterComponent implements OnInit {
   }
 
   showPassword(): void {
-    let x = <HTMLInputElement>document.getElementById("password");
+    let x = <HTMLInputElement>document.getElementById('password');
     if (x.type === 'password') {
       x.type = 'text';
     } else {

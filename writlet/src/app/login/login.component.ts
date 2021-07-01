@@ -10,7 +10,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 })
 export class LoginComponent implements OnInit {
   form:FormGroup;
-  errorColor:string = "";
+  errorColor:string = '';
 
   constructor(private fb:FormBuilder,
               private authService: AuthService,

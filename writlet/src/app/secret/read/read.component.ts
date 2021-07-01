@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {CommunicationService} from "../../communication.service";
-import {AuthService} from "../../auth/auth.service";
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommunicationService } from '../../communication.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-read',

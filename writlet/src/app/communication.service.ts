@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable} from "rxjs";
+import { Observable} from 'rxjs';
 import { HttpClient } from '@angular/common/http'
 import { shareReplay, tap } from 'rxjs/operators'
-import {AuthService} from "./auth/auth.service";
+import {AuthService} from './auth/auth.service';
 
 const API_URL = 'http://localhost:5000/api/'
 

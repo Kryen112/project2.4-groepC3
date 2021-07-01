@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core'
-import { HttpClient } from '@angular/common/http'
 import { shareReplay, tap } from 'rxjs/operators'
-import { HttpHeaders } from "@angular/common/http";
-
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import * as moment from 'moment';
 import * as jwt_decode from 'jwt-decode';
-import {Observable} from "rxjs";
+import {Observable} from 'rxjs';
 
 const API_URL = 'http://localhost:5000/api/'
 
@@ -129,7 +127,7 @@ export class AuthService {
     }
 
     public getExpiration(): any {
-        const expiration = localStorage.getItem('expires_at') + "";
+        const expiration = localStorage.getItem('expires_at') + '';
         const expiresAt = JSON.parse(expiration);
         return moment(expiresAt);
     }
