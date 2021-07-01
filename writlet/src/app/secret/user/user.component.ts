@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Router } from '@angular/router';
+import { CommunicationService } from 'src/app/communication.service';
 
 @Component({
   selector: 'app-user',
@@ -22,6 +23,7 @@ export class UserComponent implements OnInit {
   show: boolean;
 
   constructor(private fb:FormBuilder,
+              private commService: CommunicationService,
               private authService: AuthService,
               private router: Router) {
 
@@ -84,7 +86,7 @@ export class UserComponent implements OnInit {
 
     if (val.name && val.olderPassword || val.name && val.newerPassword && val.olderPassword || val.newerPassword && val.olderPassword) {
       if(val.name){
-        this.authService.user(val.name)
+        this.commService.user(val.name)
           .subscribe(
             (info) => {
               this.data = info;
@@ -98,18 +100,18 @@ export class UserComponent implements OnInit {
                 return;
               }
               if(this.data['message'] === 'user not found'){
-                this.authService.userInfo(this.oldname)
+                this.commService.userInfo(this.oldname)
                   .subscribe(
                     (info) => {
                       this.data = info;
-                      this.authService.hashCheck(this.oldname, val.olderPassword)
+                      this.commService.hashCheck(this.oldname, val.olderPassword)
                         .subscribe(
                           (hash) => {
                             if(hash['message'] === 'hash was a match') {
                               this.username = val.name;
                               if (!val.newerPassword) {
                                 this.password = '1';
-                                this.authService.userUpdated(this.username, this.oldname, this.password)
+                                this.commService.userUpdated(this.username, this.oldname, this.password)
                                   .subscribe(
                                     () => {
                                       alert('User information updated.');
@@ -129,7 +131,7 @@ export class UserComponent implements OnInit {
                                     if (this.number) {
                                       if (this.length) {
                                         this.password = val.newerPassword;
-                                        this.authService.hashCheck(this.oldname, val.newerPassword)
+                                        this.commService.hashCheck(this.oldname, val.newerPassword)
                                           .subscribe(
                                             (hash) => {
                                               if (hash['message'] === 'hash was a match') {
@@ -137,7 +139,7 @@ export class UserComponent implements OnInit {
                                                 return;
                                               }
                                               else{
-                                                this.authService.userUpdated(this.username, this.oldname, this.password)
+                                                this.commService.userUpdated(this.username, this.oldname, this.password)
                                                   .subscribe(
                                                     () => {
                                                       alert('User information updated.');
@@ -184,18 +186,18 @@ export class UserComponent implements OnInit {
           );
       }
       else if(!val.name){
-        this.authService.userInfo(this.oldname)
+        this.commService.userInfo(this.oldname)
           .subscribe(
             (info) => {
               this.data = info;
-              this.authService.hashCheck(this.oldname, val.olderPassword)
+              this.commService.hashCheck(this.oldname, val.olderPassword)
                 .subscribe(
                   (hash) => {
                     if(hash['message'] === 'hash was a match') {
                       this.username = this.oldname;
                       if (!val.newerPassword) {
                         this.password = '1';
-                        this.authService.userUpdated(this.username, this.oldname, this.password)
+                        this.commService.userUpdated(this.username, this.oldname, this.password)
                           .subscribe(
                             () => {
                               alert('User information updated.');
@@ -215,7 +217,7 @@ export class UserComponent implements OnInit {
                             if (this.number) {
                               if (this.length) {
                                 this.password = val.newerPassword;
-                                this.authService.hashCheck(this.oldname, val.newerPassword)
+                                this.commService.hashCheck(this.oldname, val.newerPassword)
                                   .subscribe(
                                     (hash) => {
                                       if (hash['message'] === 'hash was a match') {
@@ -223,7 +225,7 @@ export class UserComponent implements OnInit {
                                         return;
                                       }
                                       else{
-                                        this.authService.userUpdated(this.username, this.oldname, this.password)
+                                        this.commService.userUpdated(this.username, this.oldname, this.password)
                                           .subscribe(
                                             () => {
                                               alert('user information updated.');

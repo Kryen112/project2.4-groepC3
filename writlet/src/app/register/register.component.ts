@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
+import { CommunicationService } from '../communication.service';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,7 @@ export class RegisterComponent implements OnInit {
   show: boolean;
 
   constructor(private fb:FormBuilder,
-              private authService: AuthService,
+              private commService: CommunicationService,
               private router: Router) {
 
     this.form = this.fb.group({
@@ -75,7 +76,7 @@ export class RegisterComponent implements OnInit {
           if (this.capital) {
             if (this.number) {
               if (this.length) {
-                this.authService.register(val.name, val.password)
+                this.commService.register(val.name, val.password)
                 .subscribe(
                   () => {
                     alert('Registration successful. You can now login.');
