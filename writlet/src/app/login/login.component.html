@@ -28,7 +28,9 @@
              [style.backgroundColor]="errorColor" maxlength="16" formControlName="password">
     </tr>
     <tr class="login">
-      <input type="checkbox" (click)="showPassword()">Show Password
+      <label>
+        <input type="checkbox" (click)="showPassword()">Show Password
+      </label>
     </tr>
     <tr class="login">
       <button type="submit" (click)="login()">Login</button>
